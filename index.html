@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>出门提醒 - 明天天气小贴士</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    color: #fff;
+    overflow-x: hidden;
+  }
+  .container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 20px 16px 40px;
+  }
+
+  /* 顶部 */
+  .header {
+    text-align: center;
+    padding: 20px 0 10px;
+  }
+  .header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #f9d423, #ff4e50);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 2px;
+  }
+  .header .subtitle {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 4px;
+  }
+
+  /* 城市选择 */
+  .city-bar {
+    display: flex;
+    gap: 8px;
+    margin: 16px 0;
+  }
+  .city-bar input {
+    flex: 1;
+    padding: 10px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .city-bar input::placeholder { color: rgba(255,255,255,0.35); }
+  .city-bar input:focus { border-color: #f9d423; }
+  .city-bar button {
+    padding: 10px 20px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, #f9d423, #ff4e50);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.2s;
+    white-space: nowrap;
+  }
+  .city-bar button:active { transform: scale(0.95); }
+
+  /* 定位按钮 */
+  .locate-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: 0 auto 16px;
+    padding: 8px 18px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.6);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .locate-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
+
+  /* 加载 */
+  .loading {
+    text-align: center;
+    padding: 60px 0;
+    font-size: 16px;
+    color: rgba(255,255,255,0.5);
+  }
+  .loading .spinner {
+    width: 40px; height: 40px;
+    border: 3px solid rgba(255,255,255,0.1);
+    border-top-color: #f9d423;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* 出门指数卡 */
+  .index-card {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(255,255,255,0.1);
+    text-align: center;
+  }
+  .index-card .card-title {
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 16px;
+  }
+  .index-score {
+    font-size: 64px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .index-label {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .index-desc {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.5;
+  }
+  .index-bars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 18px;
+  }
+  .index-bar-item {
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    padding: 10px 6px;
+    text-align: center;
+  }
+  .index-bar-item .bar-icon { font-size: 22px; margin-bottom: 4px; }
+  .index-bar-item .bar-label { font-size: 11px; color: rgba(255,255,255,0.45); margin-bottom: 6px; }
+  .index-bar-item .bar-track {
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    margin: 0 4px;
+  }
+  .index-bar-item .bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.8s ease;
+  }
+  .index-bar-item .bar-val { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+
+  /* 明天天气卡片 */
+  .weather-card {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .weather-card .card-title {
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .weather-main {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .weather-icon {
+    font-size: 56px;
+    line-height: 1;
+  }
+  .weather-temp {
+    flex: 1;
+  }
+  .weather-temp .temp-range {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -1px;
+  }
+  .weather-temp .temp-range .unit { font-size: 18px; font-weight: 400; }
+  .weather-temp .weather-desc {
+    font-size: 16px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 2px;
+  }
+  .weather-temp .feels-like {
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 2px;
+  }
+
+  .weather-details {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .detail-item {
+    text-align: center;
+    padding: 10px 4px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+  }
+  .detail-item .detail-icon { font-size: 20px; margin-bottom: 4px; }
+  .detail-item .detail-val { font-size: 15px; font-weight: 600; }
+  .detail-item .detail-label { font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 2px; }
+
+  /* 出门提醒 */
+  .tips-card {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .tips-card .card-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tip-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    animation: fadeInUp 0.5s ease both;
+  }
+  .tip-item:last-child { border-bottom: none; }
+  .tip-item:nth-child(2) { animation-delay: 0.05s; }
+  .tip-item:nth-child(3) { animation-delay: 0.1s; }
+  .tip-item:nth-child(4) { animation-delay: 0.15s; }
+  .tip-item:nth-child(5) { animation-delay: 0.2s; }
+  .tip-item:nth-child(6) { animation-delay: 0.25s; }
+  .tip-item:nth-child(7) { animation-delay: 0.3s; }
+  .tip-item:nth-child(8) { animation-delay: 0.35s; }
+  .tip-item:nth-child(9) { animation-delay: 0.4s; }
+  .tip-item:nth-child(10) { animation-delay: 0.45s; }
+  .tip-item:nth-child(11) { animation-delay: 0.5s; }
+  .tip-item:nth-child(12) { animation-delay: 0.55s; }
+  .tip-item:nth-child(13) { animation-delay: 0.6s; }
+  .tip-item:nth-child(14) { animation-delay: 0.65s; }
+  .tip-item:nth-child(15) { animation-delay: 0.7s; }
+  .tip-item:nth-child(16) { animation-delay: 0.75s; }
+  .tip-item:nth-child(17) { animation-delay: 0.8s; }
+  .tip-item:nth-child(18) { animation-delay: 0.85s; }
+  .tip-item:nth-child(19) { animation-delay: 0.9s; }
+  .tip-item:nth-child(20) { animation-delay: 0.95s; }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .tip-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.06);
+  }
+  .tip-content { flex: 1; }
+  .tip-content .tip-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+  .tip-content .tip-desc {
+    font-size: 13px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.5;
+  }
+
+  /* 重要提醒高亮 */
+  .tip-item.important .tip-icon {
+    background: rgba(255,78,80,0.2);
+  }
+  .tip-item.important .tip-title {
+    color: #ff6b6b;
+  }
+
+  /* 分类标题 */
+  .section-title {
+    font-size: 13px;
+    color: rgba(255,255,255,0.35);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 8px 0 4px;
+    margin-top: 4px;
+    border-bottom: none !important;
+    animation: none !important;
+  }
+  .section-title .section-line {
+    display: inline-block;
+    width: 24px;
+    height: 2px;
+    background: rgba(255,255,255,0.2);
+    vertical-align: middle;
+    margin-right: 8px;
+    border-radius: 1px;
+  }
+
+  /* 底部 */
+  .footer {
+    text-align: center;
+    padding: 20px 0;
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
+  }
+
+  /* 错误提示 */
+  .error-card {
+    background: rgba(255,78,80,0.1);
+    border: 1px solid rgba(255,78,80,0.3);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    color: rgba(255,255,255,0.7);
+    margin: 20px 0;
+  }
+  .error-card .err-icon { font-size: 40px; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>☀️ 出门提醒</h1>
+    <div class="subtitle">明天出门前，先看看这些</div>
+  </div>
+
+  <div class="locate-btn" onclick="locateMe()">📍 自动定位当前位置</div>
+
+  <div class="city-bar">
+    <input id="cityInput" type="text" placeholder="输入城市名，如：武汉" value="应城" onkeydown="if(event.key==='Enter')searchCity()">
+    <button onclick="searchCity()">查询</button>
+  </div>
+
+  <div id="content">
+    <div class="loading">
+      <div class="spinner"></div>
+      正在获取天气数据...
+    </div>
+  </div>
+
+  <div class="footer">数据来源：Open-Meteo · 仅供参考</div>
+</div>
+
+<script>
+const WMO_CODES = {
+  0: { desc: '晴', icon: '☀️' },
+  1: { desc: '大部晴朗', icon: '🌤️' },
+  2: { desc: '多云', icon: '⛅' },
+  3: { desc: '阴天', icon: '☁️' },
+  45: { desc: '雾', icon: '🌫️' },
+  48: { desc: '冻雾', icon: '🌫️' },
+  51: { desc: '小毛毛雨', icon: '🌦️' },
+  53: { desc: '中毛毛雨', icon: '🌦️' },
+  55: { desc: '大毛毛雨', icon: '🌧️' },
+  56: { desc: '冻毛毛雨', icon: '🌧️' },
+  57: { desc: '强冻毛毛雨', icon: '🌧️' },
+  61: { desc: '小雨', icon: '🌧️' },
+  63: { desc: '中雨', icon: '🌧️' },
+  65: { desc: '大雨', icon: '🌧️' },
+  66: { desc: '冻雨', icon: '🧊' },
+  67: { desc: '强冻雨', icon: '🧊' },
+  71: { desc: '小雪', icon: '🌨️' },
+  73: { desc: '中雪', icon: '❄️' },
+  75: { desc: '大雪', icon: '❄️' },
+  77: { desc: '雪粒', icon: '🌨️' },
+  80: { desc: '小阵雨', icon: '🌦️' },
+  81: { desc: '中阵雨', icon: '🌧️' },
+  82: { desc: '强阵雨', icon: '⛈️' },
+  85: { desc: '小阵雪', icon: '🌨️' },
+  86: { desc: '大阵雪', icon: '❄️' },
+  95: { desc: '雷暴', icon: '⛈️' },
+  96: { desc: '雷暴伴冰雹', icon: '⛈️' },
+  99: { desc: '强雷暴伴冰雹', icon: '⛈️' },
+};
+
+function getWMO(code) { return WMO_CODES[code] || { desc: '未知', icon: '❓' }; }
+
+function windLevel(speed) {
+  if (speed < 6) return '微风'; if (speed < 12) return '轻风'; if (speed < 20) return '和风';
+  if (speed < 29) return '劲风'; if (speed < 39) return '强风'; return '大风';
+}
+
+function uvLevel(idx) {
+  if (idx <= 2) return '弱'; if (idx <= 5) return '中等'; if (idx <= 7) return '强'; if (idx <= 10) return '很强'; return '极强';
+}
+
+// 出门指数计算
+function calcOutIndex(data) {
+  let score = 80;
+  const { tempMin, tempMax, weatherCode, precipProb, windMax, uvMax, humidity } = data;
+  const isRain = [51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,99].includes(weatherCode);
+  const isSnow = [71,73,75,77,85,86].includes(weatherCode);
+  const isFog = [45,48].includes(weatherCode);
+  const isThunder = [95,96,99].includes(weatherCode);
+
+  if (isThunder) score -= 30; else if (isRain) score -= precipProb * 0.2;
+  if (isSnow) score -= 15;
+  if (isFog) score -= 10;
+  if (tempMax >= 38) score -= 15; else if (tempMax >= 35) score -= 8; else if (tempMax >= 30) score -= 3;
+  if (tempMin <= -5) score -= 15; else if (tempMin <= 0) score -= 8; else if (tempMin <= 5) score -= 3;
+  if (windMax >= 50) score -= 15; else if (windMax >= 39) score -= 8; else if (windMax >= 25) score -= 3;
+  if (uvMax > 9) score -= 5; else if (uvMax > 7) score -= 2;
+  if (humidity >= 90) score -= 5; else if (humidity <= 20) score -= 3;
+  const diff = tempMax - tempMin;
+  if (diff >= 18) score -= 5; else if (diff >= 12) score -= 2;
+
+  score = Math.max(0, Math.min(100, Math.round(score)));
+
+  let label, color, desc;
+  if (score >= 85) { label = '非常适宜'; color = '#4caf50'; desc = '明天天气很棒，放心出门吧！'; }
+  else if (score >= 70) { label = '适宜出门'; color = '#8bc34a'; desc = '天气不错，正常出行即可。'; }
+  else if (score >= 55) { label = '一般'; color = '#ffc107'; desc = '天气有些小状况，注意一下提醒事项。'; }
+  else if (score >= 40) { label = '不太适宜'; color = '#ff9800'; desc = '天气条件较差，尽量减少外出或做好防护。'; }
+  else { label = '不建议出门'; color = '#f44336'; desc = '天气恶劣，非必要不出门！'; }
+
+  return { score, label, color, desc };
+}
+
+// 子指数
+function calcSubIndex(data) {
+  const { tempMin, tempMax, weatherCode, precipProb, windMax, uvMax, humidity } = data;
+  const isRain = [51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,99].includes(weatherCode);
+  const isSnow = [71,73,75,77,85,86].includes(weatherCode);
+
+  // 穿衣指数
+  let dress = 80;
+  if (tempMax >= 35) dress = 30; else if (tempMax >= 30) dress = 50; else if (tempMax >= 22) dress = 90;
+  else if (tempMax >= 15) dress = 70; else if (tempMax >= 5) dress = 50; else dress = 30;
+  const diff = tempMax - tempMin; if (diff >= 15) dress -= 15;
+
+  // 运动指数
+  let sport = 80;
+  if (isRain || isSnow) sport -= 30; if (precipProb > 50) sport -= 15;
+  if (tempMax >= 35 || tempMin <= -5) sport -= 25; else if (tempMax >= 30 || tempMin <= 0) sport -= 10;
+  if (windMax >= 30) sport -= 15; else if (windMax >= 20) sport -= 5;
+  if (uvMax > 8) sport -= 10;
+
+  // 晾晒指数
+  let dry = 80;
+  if (isRain) dry = 20; else if (isSnow) dry = 25;
+  if (precipProb > 60) dry -= 30; else if (precipProb > 30) dry -= 15;
+  if (humidity >= 80) dry -= 20; else if (humidity >= 65) dry -= 10;
+  if (weatherCode <= 1) dry += 10;
+
+  return {
+    dress: { score: Math.max(0, Math.min(100, dress)), label: '穿衣' },
+    sport: { score: Math.max(0, Math.min(100, sport)), label: '运动' },
+    dry: { score: Math.max(0, Math.min(100, dry)), label: '晾晒' },
+  };
+}
+
+function barColor(score) {
+  if (score >= 70) return '#4caf50'; if (score >= 50) return '#ffc107'; return '#ff5722';
+}
+
+// ===== 核心：生成所有出门提醒 =====
+function generateTips(data) {
+  const tips = [];
+  const { tempMin, tempMax, weatherCode, precipProb, windMax, uvMax, humidity, sunrise, sunset, precipSum, feelsMax, feelsMin } = data;
+  const wmo = getWMO(weatherCode);
+  const isRain = [51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,99].includes(weatherCode);
+  const isSnow = [71,73,75,77,85,86].includes(weatherCode);
+  const isFog = [45,48].includes(weatherCode);
+  const isThunder = [95,96,99].includes(weatherCode);
+  const isOvercast = weatherCode === 3;
+  const isClear = weatherCode <= 1;
+  const diff = tempMax - tempMin;
+
+  // ===== 穿衣篇 =====
+  tips.push({ type: 'section', title: '👗 穿衣打扮' });
+
+  if (tempMax >= 35) {
+    tips.push({ icon: '🥵', title: '高温预警', desc: `明天最高 ${tempMax}°C，酷暑天气！穿透气速干面料，浅色衣物更凉爽，避免黑色吸热`, important: true });
+    tips.push({ icon: '🧊', title: '防暑细节', desc: '随身带水杯，避免正午时段长时间户外活动，备好藿香正气水等防暑药品' });
+  } else if (tempMax >= 30) {
+    tips.push({ icon: '👕', title: '穿清凉衣物', desc: `明天最高 ${tempMax}°C，穿短袖短裤等薄款衣物，选浅色棉麻面料更舒适` });
+  } else if (tempMax >= 22) {
+    tips.push({ icon: '👔', title: '舒适穿搭', desc: `明天 ${tempMin}~${tempMax}°C，温度宜人，短袖或薄长袖都可以` });
+  } else if (tempMax >= 15) {
+    tips.push({ icon: '🧥', title: '带件外套', desc: `明天 ${tempMin}~${tempMax}°C，早晚偏凉，穿薄外套或针织衫，方便穿脱` });
+  } else if (tempMax >= 5) {
+    tips.push({ icon: '🧣', title: '注意保暖', desc: `明天 ${tempMin}~${tempMax}°C，天气较冷，穿厚外套加围巾，注意手脚保暖`, important: true });
+    tips.push({ icon: '🧤', title: '配件提醒', desc: '围巾、手套可以安排上，出门前检查拉链是否拉好' });
+  } else {
+    tips.push({ icon: '🥶', title: '严寒警告', desc: `明天最低 ${tempMin}°C！穿羽绒服+毛衣+保暖内衣，帽子围巾手套全副武装`, important: true });
+    tips.push({ icon: '🧦', title: '防冻细节', desc: '穿厚袜子保暖鞋，贴暖宝宝在腰腹和脚底，避免皮肤裸露' });
+  }
+
+  // 温差提醒
+  if (diff >= 15) {
+    tips.push({ icon: '🌡️', title: '昼夜温差大', desc: `温差 ${diff.toFixed(0)}°C，建议叠穿：内搭薄衣+中间层+外搭，随时穿脱` });
+  } else if (diff >= 10) {
+    tips.push({ icon: '↕️', title: '有一定温差', desc: `温差 ${diff.toFixed(0)}°C，早晚比中午凉，备一件薄外套` });
+  }
+
+  // 体感温度
+  if (feelsMax !== null) {
+    const feelsDiff = feelsMax - tempMax;
+    if (Math.abs(feelsDiff) >= 4) {
+      tips.push({ icon: '🤒', title: '体感温度差异', desc: `气温 ${tempMax}°C 但体感约 ${feelsMax}°C，${feelsDiff > 0 ? '比实际更热，注意防暑' : '比实际更冷，加件衣服'}` });
+    }
+  }
+
+  // ===== 天气篇 =====
+  tips.push({ type: 'section', title: '🌤️ 天气应对' });
+
+  if (isThunder) {
+    tips.push({ icon: '⛈️', title: '雷暴天气', desc: '明天有雷暴！尽量减少外出，不在空旷地逗留，远离大树、铁塔、金属设施', important: true });
+    tips.push({ icon: '🔌', title: '防雷提示', desc: '室内拔掉不必要的电器插头，不在窗边打电话，不要洗澡' });
+    tips.push({ icon: '🚗', title: '驾车注意', desc: '雷暴天开车减速慢行，开启近光灯和雾灯，避免涉水路段' });
+  }
+
+  if (isRain) {
+    if (precipProb >= 70) {
+      tips.push({ icon: '☔', title: '一定要带伞', desc: `降雨概率 ${precipProb}%，带大伞或雨衣，穿防滑防水鞋`, important: true });
+    } else if (precipProb >= 30) {
+      tips.push({ icon: '🌂', title: '建议带伞', desc: `降雨概率 ${precipProb}%，包里塞把折叠伞，有备无患` });
+    }
+    if (precipSum > 10) {
+      tips.push({ icon: '🌊', title: '雨量较大', desc: `预计降水量 ${precipSum}mm，注意路面积水，穿雨靴更保险`, important: true });
+    }
+    tips.push({ icon: '👟', title: '鞋子选择', desc: '下雨天穿防滑防水鞋，避免穿布鞋或浅色鞋，裤脚可以挽起来' });
+    tips.push({ icon: '📱', title: '电子产品', desc: '给手机等电子设备套上防水袋，背包注意防水' });
+  }
+
+  if (isSnow) {
+    tips.push({ icon: '❄️', title: '雨雪天气', desc: `明天${wmo.desc}，路面结冰湿滑，穿防滑鞋底，走路小步慢行`, important: true });
+    tips.push({ icon: '🚗', title: '行车安全', desc: '雪天开车装防滑链，保持车距，轻踩刹车，走主干道更安全' });
+    tips.push({ icon: '🏗️', title: '出行注意', desc: '注意头顶积雪冰块，远离屋檐、棚架下方' });
+  }
+
+  if (isFog) {
+    tips.push({ icon: '🌫️', title: '大雾提醒', desc: '能见度低，开车开雾灯、降速、拉大车距，行人穿亮色衣服', important: true });
+    tips.push({ icon: '😷', title: '佩戴口罩', desc: '大雾天空气中污染物多，外出戴口罩保护呼吸道' });
+  }
+
+  if (isOvercast) {
+    tips.push({ icon: '☁️', title: '阴天心情', desc: '阴天容易情绪低落，听听音乐、和朋友聊聊天，保持好心情' });
+  }
+
+  if (isClear) {
+    tips.push({ icon: '😊', title: '好天气', desc: '明天天气晴朗，适合出门走走，晒晒太阳补补钙' });
+  }
+
+  // 紫外线
+  if (uvMax > 9) {
+    tips.push({ icon: '🧴', title: '紫外线极强', desc: `UV指数 ${uvMax}！防晒霜SPF50+，2小时补涂一次，戴帽子和太阳镜`, important: true });
+  } else if (uvMax > 7) {
+    tips.push({ icon: '🕶️', title: '防晒必要', desc: `UV指数 ${uvMax}（强），涂防晒霜、戴太阳镜和遮阳帽` });
+  } else if (uvMax > 5) {
+    tips.push({ icon: '🧢', title: '适当防晒', desc: `UV指数 ${uvMax}（中等），戴帽子或涂防晒霜即可` });
+  }
+
+  // 大风
+  if (windMax >= 50) {
+    tips.push({ icon: '💨', title: '大风预警', desc: `最大风速 ${windMax} km/h，避免外出！远离广告牌、临时搭建物和老树`, important: true });
+  } else if (windMax >= 39) {
+    tips.push({ icon: '🌬️', title: '风力较大', desc: `最大风速 ${windMax} km/h，注意固定帽子围巾，骑行注意侧风`, important: true });
+  } else if (windMax >= 20) {
+    tips.push({ icon: '🍃', title: '有风', desc: `风速 ${windMax} km/h（${windLevel(windMax)}），长头发扎起来，注意裙摆` });
+  }
+
+  // 湿度
+  if (humidity >= 90) {
+    tips.push({ icon: '💧', title: '非常潮湿', desc: `湿度 ${humidity}%，体感闷热粘腻，衣物难干，开空调除湿` });
+  } else if (humidity >= 75) {
+    tips.push({ icon: '🫧', title: '偏潮湿', desc: `湿度 ${humidity}%，体感略闷，轻薄透气衣物更舒适` });
+  } else if (humidity <= 25) {
+    tips.push({ icon: '🏜️', title: '空气很干', desc: `湿度仅 ${humidity}%！多喝水、涂润肤霜、用加湿器，注意皮肤保湿`, important: true });
+  } else if (humidity <= 35) {
+    tips.push({ icon: '干燥', title: '空气偏干', desc: `湿度 ${humidity}%，多喝温水，涂润唇膏和护手霜` });
+  }
+
+  // ===== 生活篇 =====
+  tips.push({ type: 'section', title: '🏠 生活提醒' });
+
+  // 晾晒
+  if (isRain || precipProb >= 60) {
+    tips.push({ icon: '🧺', title: '不宜晾晒', desc: '明天有雨，衣物晾户外容易淋湿，改用烘干机或室内晾衣架' });
+  } else if (humidity >= 80) {
+    tips.push({ icon: '🕐', title: '晾晒较慢', desc: '湿度高，衣物不易干，建议多晾一天或使用除湿机辅助' });
+  } else if (isClear && humidity < 60) {
+    tips.push({ icon: '☀️', title: '适合晾晒', desc: '天气晴好又干燥，洗衣服、晒被子的好时机！' });
+  }
+
+  // 开窗通风
+  if (isRain || isFog) {
+    tips.push({ icon: '🪟', title: '关好窗户', desc: '明天有雨/雾，出门前关好门窗，防止雨水和湿气进入室内' });
+  } else if (isClear && humidity < 70 && windMax < 30) {
+    tips.push({ icon: '🌬️', title: '开窗通风', desc: '天气好，早上或傍晚开窗换换气，让室内空气清新' });
+  } else if (windMax >= 30) {
+    tips.push({ icon: '🚪', title: '风大关窗', desc: '风力较大，注意关好门窗，防止物品被风吹落' });
+  }
+
+  // 洗车
+  if (isRain || precipProb >= 50) {
+    tips.push({ icon: '🚿', title: '暂不洗车', desc: '最近有雨，洗了也白洗，等天晴再洗更划算' });
+  } else if (isClear && precipProb < 20) {
+    tips.push({ icon: '🚘', title: '适合洗车', desc: '未来天气晴好，洗车后能保持干净较久' });
+  }
+
+  // 饮食
+  if (tempMax >= 35) {
+    tips.push({ icon: '🥤', title: '饮食建议', desc: '高温天多喝水和绿豆汤，少吃油腻辛辣，水果蔬菜多吃' });
+  } else if (tempMax >= 30) {
+    tips.push({ icon: '🍉', title: '消暑饮食', desc: '适当吃西瓜、凉茶等消暑食品，别贪凉喝太多冰饮' });
+  } else if (tempMin <= 0) {
+    tips.push({ icon: '🍲', title: '暖身饮食', desc: '天冷适合吃火锅、热汤面、姜茶等暖身食物' });
+  } else if (isOvercast || isRain) {
+    tips.push({ icon: '☕', title: '暖心饮食', desc: '阴雨天来杯热饮，巧克力、奶茶都能提升幸福感' });
+  }
+
+  // ===== 出行篇 =====
+  tips.push({ type: 'section', title: '🚶 出行建议' });
+
+  // 运动建议
+  if (isThunder || (isRain && precipProb >= 70)) {
+    tips.push({ icon: '🏋️', title: '室内运动', desc: '天气不适合户外运动，在家做瑜伽、跳绳或去健身房' });
+  } else if (isRain) {
+    tips.push({ icon: '🏃', title: '运动建议', desc: '有小雨，如果跑步建议选室内，或穿防风外套短时间户外运动' });
+  } else if (tempMax >= 35) {
+    tips.push({ icon: '⏰', title: '错峰运动', desc: '高温天避免10:00-16:00户外运动，选清晨或傍晚锻炼' });
+  } else if (isClear && tempMax >= 18 && tempMax <= 28 && windMax < 20) {
+    tips.push({ icon: '🏃‍♂️', title: '适合运动', desc: '天气很适合户外运动！跑步、骑车、散步都很舒服' });
+  } else if (isSnow) {
+    tips.push({ icon: '⛷️', title: '运动选择', desc: '雪天路滑不宜跑步，如果喜欢可以尝试室内运动或赏雪散步' });
+  }
+
+  // 出行方式
+  if (isRain && precipProb >= 60) {
+    tips.push({ icon: '🚇', title: '出行方式', desc: '下雨天建议地铁/公交出行，减少步行和骑行，避免淋雨' });
+  } else if (isClear && tempMax >= 18 && tempMax <= 30 && windMax < 20) {
+    tips.push({ icon: '🚲', title: '绿色出行', desc: '天气好，骑车或步行上班都是不错的选择' });
+  } else if (tempMax >= 35 || tempMin <= -5) {
+    tips.push({ icon: '🚗', title: '尽量搭车', desc: '极端天气尽量开车或坐公交，减少户外暴露时间' });
+  }
+
+  // 日出日落
+  if (sunrise && sunset) {
+    tips.push({ icon: '🌅', title: '日出日落', desc: `日出 ${sunrise} · 日落 ${sunset}，${sunset < '18:00' ? '天黑较早，下班注意安全' : '日照充足，户外时间充裕'}` });
+  }
+
+  // ===== 健康篇 =====
+  tips.push({ type: 'section', title: '💪 健康关怀' });
+
+  // 睡眠建议
+  if (isOvercast || isRain) {
+    tips.push({ icon: '😴', title: '睡眠提醒', desc: '阴雨天容易犯困，晚上别熬夜，保证7-8小时睡眠' });
+  } else if (tempMax >= 35) {
+    tips.push({ icon: '🌙', title: '高温睡眠', desc: '夜间温度也高，空调调26°C左右，定时关闭避免着凉' });
+  } else if (humidity >= 80) {
+    tips.push({ icon: '💤', title: '潮湿影响睡眠', desc: '湿度高影响睡眠质量，开空调除湿模式或用除湿机' });
+  }
+
+  // 皮肤护理
+  if (uvMax > 5) {
+    tips.push({ icon: '🧴', title: '皮肤防护', desc: '紫外线强，除了防晒霜，晒后回来用芦荟胶或补水面膜修复' });
+  }
+  if (humidity <= 35 || tempMin <= 0) {
+    tips.push({ icon: '🧴', title: '保湿护肤', desc: '空气干燥/寒冷，随身带护手霜，涂润唇膏，洗脸后及时拍爽肤水' });
+  }
+  if (humidity >= 85 && tempMax >= 25) {
+    tips.push({ icon: '🦠', title: '防霉除菌', desc: '高温高湿容易滋生细菌霉菌，注意食物保鲜，衣物彻底晒干再收' });
+  }
+
+  // 季节性提醒
+  const month = new Date().getMonth() + 1;
+  if (month >= 3 && month <= 5) {
+    tips.push({ icon: '🌸', title: '春季提醒', desc: '春季花粉多，过敏体质外出戴口罩，回家清洗鼻腔' });
+    if (isClear && windMax >= 15) {
+      tips.push({ icon: '🤧', title: '花粉预警', desc: '晴天+有风，花粉浓度高，过敏人群减少户外活动或戴好口罩', important: true });
+    }
+  } else if (month >= 6 && month <= 8) {
+    tips.push({ icon: '🦟', title: '防蚊提醒', desc: '夏天蚊虫活跃，出门喷驱蚊液，家中清理积水防蚊虫滋生' });
+    if (isRain) {
+      tips.push({ icon: '🦟', title: '雨后防蚊', desc: '雨后积水增多，蚊虫更活跃，注意清理花盆底碟等积水处' });
+    }
+  } else if (month >= 9 && month <= 11) {
+    tips.push({ icon: '🍂', title: '秋季提醒', desc: '秋天气候干燥，多喝水多吃梨和蜂蜜润肺，早晚加衣别着凉' });
+  } else {
+    tips.push({ icon: '❄️', title: '冬季提醒', desc: '冬季寒冷干燥，注意保暖防感冒，室内开暖气也要定时通风' });
+  }
+
+  // 感冒风险
+  if (diff >= 12 || (tempMin <= 5 && tempMax >= 15)) {
+    tips.push({ icon: '🤒', title: '感冒风险', desc: '温差大容易感冒，注意及时增减衣物，备好感冒药以防万一' });
+  }
+
+  // ===== 物品清单 =====
+  tips.push({ type: 'section', title: '🎒 出门必带清单' });
+
+  const items = [];
+  if (isRain || precipProb >= 30) items.push('☂️ 雨伞');
+  if (uvMax > 5) items.push('🧴 防晒霜');
+  if (uvMax > 7) items.push('🕶️ 太阳镜');
+  if (tempMax >= 30) items.push('💧 水杯');
+  if (tempMin <= 5) items.push('🧤 手套');
+  if (tempMin <= 0) items.push('🧣 围巾');
+  if (isFog) items.push('😷 口罩');
+  if (humidity <= 35) items.push('🧴 护手霜');
+  if (windMax >= 25) items.push('📎 固定夹(帽子/裙摆)');
+  if (isRain && precipProb >= 50) items.push('📱 防水袋');
+  if (month >= 6 && month <= 8) items.push('🦟 驱蚊液');
+  if (month >= 3 && month <= 5) items.push('🤧 抗过敏药');
+
+  // 常规必带
+  items.push('🔑 钥匙');
+  items.push('📱 手机');
+
+  if (items.length > 0) {
+    tips.push({ icon: '🎒', title: '明天出门别忘了', desc: items.join('  ') });
+  }
+
+  return tips;
+}
+
+function renderWeather(data, cityName) {
+  const wmo = getWMO(data.weatherCode);
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const dateStr = tomorrow.toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', weekday: 'long' });
+
+  const outIdx = calcOutIndex(data);
+  const subIdx = calcSubIndex(data);
+
+  const tips = generateTips(data);
+  const importantCount = tips.filter(t => t.important).length;
+
+  let html = '';
+
+  // 出门指数卡
+  html += `
+  <div class="index-card">
+    <div class="card-title">📊 明日出门指数</div>
+    <div class="index-score" style="color:${outIdx.color}">${outIdx.score}</div>
+    <div class="index-label" style="color:${outIdx.color}">${outIdx.label}</div>
+    <div class="index-desc">${outIdx.desc}</div>
+    <div class="index-bars">
+      <div class="index-bar-item">
+        <div class="bar-icon">👗</div>
+        <div class="bar-label">穿衣</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${subIdx.dress.score}%;background:${barColor(subIdx.dress.score)}"></div></div>
+        <div class="bar-val">${subIdx.dress.score >= 70 ? '适宜' : subIdx.dress.score >= 50 ? '一般' : '注意'}</div>
+      </div>
+      <div class="index-bar-item">
+        <div class="bar-icon">🏃</div>
+        <div class="bar-label">运动</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${subIdx.sport.score}%;background:${barColor(subIdx.sport.score)}"></div></div>
+        <div class="bar-val">${subIdx.sport.score >= 70 ? '适宜' : subIdx.sport.score >= 50 ? '一般' : '不宜'}</div>
+      </div>
+      <div class="index-bar-item">
+        <div class="bar-icon">🧺</div>
+        <div class="bar-label">晾晒</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${subIdx.dry.score}%;background:${barColor(subIdx.dry.score)}"></div></div>
+        <div class="bar-val">${subIdx.dry.score >= 70 ? '适宜' : subIdx.dry.score >= 50 ? '一般' : '不宜'}</div>
+      </div>
+    </div>
+  </div>`;
+
+  // 天气卡
+  html += `
+  <div class="weather-card">
+    <div class="card-title">📅 ${dateStr} · ${cityName}</div>
+    <div class="weather-main">
+      <div class="weather-icon">${wmo.icon}</div>
+      <div class="weather-temp">
+        <div class="temp-range">${data.tempMin}<span class="unit">°</span> / ${data.tempMax}<span class="unit">°C</span></div>
+        <div class="weather-desc">${wmo.desc}</div>
+        ${data.feelsMax !== null ? `<div class="feels-like">体感 ${data.feelsMin}°~${data.feelsMax}°C</div>` : ''}
+      </div>
+    </div>
+    <div class="weather-details">
+      <div class="detail-item">
+        <div class="detail-icon">🌧️</div>
+        <div class="detail-val">${data.precipProb}%</div>
+        <div class="detail-label">降雨概率</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-icon">💨</div>
+        <div class="detail-val">${data.windMax}<small>km/h</small></div>
+        <div class="detail-label">${windLevel(data.windMax)}</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-icon">☀️</div>
+        <div class="detail-val">${data.uvMax}</div>
+        <div class="detail-label">UV ${uvLevel(data.uvMax)}</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-icon">💧</div>
+        <div class="detail-val">${data.humidity}%</div>
+        <div class="detail-label">湿度</div>
+      </div>
+    </div>
+  </div>`;
+
+  // 出门提醒卡
+  html += `
+  <div class="tips-card">
+    <div class="card-title">🔔 明天出门提醒${importantCount > 0 ? ` <span style="font-size:12px;color:#ff6b6b;font-weight:400;">· ${importantCount}条重要提醒</span>` : ''}</div>
+    ${tips.map(t => {
+      if (t.type === 'section') {
+        return `<div class="section-title"><span class="section-line"></span>${t.title}</div>`;
+      }
+      return `
+      <div class="tip-item${t.important ? ' important' : ''}">
+        <div class="tip-icon">${t.icon}</div>
+        <div class="tip-content">
+          <div class="tip-title">${t.title}</div>
+          <div class="tip-desc">${t.desc}</div>
+        </div>
+      </div>`;
+    }).join('')}
+  </div>`;
+
+  document.getElementById('content').innerHTML = html;
+}
+
+function renderError(msg) {
+  document.getElementById('content').innerHTML = `
+    <div class="error-card">
+      <div class="err-icon">😕</div>
+      <div>${msg}</div>
+    </div>`;
+}
+
+async function fetchWeather(lat, lon, cityName) {
+  document.getElementById('content').innerHTML = '<div class="loading"><div class="spinner"></div>正在获取天气数据...</div>';
+
+  try {
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weathercode,wind_speed_10m_max,uv_index_max,sunrise,sunset,relative_humidity_2m_max,apparent_temperature_max,apparent_temperature_min,precipitation_sum&timezone=auto&forecast_days=2`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('天气API请求失败');
+    const d = await res.json();
+
+    const i = 1; // 明天 = index 1
+    const data = {
+      tempMax: Math.round(d.daily.temperature_2m_max[i]),
+      tempMin: Math.round(d.daily.temperature_2m_min[i]),
+      weatherCode: d.daily.weathercode[i],
+      precipProb: d.daily.precipitation_probability_max[i] ?? 0,
+      precipSum: Math.round((d.daily.precipitation_sum[i] ?? 0) * 10) / 10,
+      windMax: Math.round(d.daily.wind_speed_10m_max[i]),
+      uvMax: Math.round((d.daily.uv_index_max[i] ?? 0) * 10) / 10,
+      humidity: d.daily.relative_humidity_2m_max[i] ?? 50,
+      feelsMax: d.daily.apparent_temperature_max ? Math.round(d.daily.apparent_temperature_max[i]) : null,
+      feelsMin: d.daily.apparent_temperature_min ? Math.round(d.daily.apparent_temperature_min[i]) : null,
+      sunrise: d.daily.sunrise[i] ? d.daily.sunrise[i].split('T')[1] : null,
+      sunset: d.daily.sunset[i] ? d.daily.sunset[i].split('T')[1] : null,
+    };
+
+    renderWeather(data, cityName);
+  } catch (e) {
+    console.error(e);
+    renderError('获取天气数据失败，请检查网络后重试');
+  }
+}
+
+async function searchCity() {
+  const city = document.getElementById('cityInput').value.trim();
+  if (!city) return;
+  document.getElementById('content').innerHTML = '<div class="loading"><div class="spinner"></div>正在搜索城市...</div>';
+
+  try {
+    const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=zh`;
+    const geoRes = await fetch(geoUrl);
+    const geoData = await geoRes.json();
+    if (!geoData.results || geoData.results.length === 0) {
+      renderError(`未找到城市「${city}」，请检查名称后重试`);
+      return;
+    }
+    const r = geoData.results[0];
+    const name = r.name + (r.admin1 ? ` · ${r.admin1}` : '');
+    await fetchWeather(r.latitude, r.longitude, name);
+  } catch (e) {
+    renderError('城市搜索失败，请检查网络后重试');
+  }
+}
+
+function locateMe() {
+  if (!navigator.geolocation) {
+    renderError('您的浏览器不支持定位功能');
+    return;
+  }
+  document.getElementById('content').innerHTML = '<div class="loading"><div class="spinner"></div>正在定位...</div>';
+
+  navigator.geolocation.getCurrentPosition(
+    async (pos) => {
+      await fetchWeather(pos.coords.latitude, pos.coords.longitude, '当前位置');
+    },
+    () => { renderError('定位失败，请手动输入城市名查询'); },
+    { timeout: 8000 }
+  );
+}
+
+searchCity();
+</script>
+</body>
+</html>
