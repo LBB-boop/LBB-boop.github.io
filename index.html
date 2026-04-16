@@ -567,21 +567,132 @@
     margin: 20px 0;
   }
   .error-card .err-icon { font-size: 40px; margin-bottom: 8px; }
+
+  /* ── 应援弹幕 ── */
+  .danmaku-bar {
+    height: 38px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    border-radius: 19px;
+    background: rgba(0,0,0,0.35);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,80,80,0.2);
+    flex-shrink: 0;
+  }
+  .danmaku-track {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 48px;
+    animation: danmakuRoll 32s linear infinite;
+  }
+  .danmaku-track span{font-size:13px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.7);font-weight:600;letter-spacing:.5px}
+  .danmaku-track .dm-red{color:#ff6b6b}.danmaku-track .dm-gold{color:#ffd700}.danmaku-track .dm-pink{color:#ffb6c1}.danmaku-track .dm-cyan{color:#a8edea}
+  @keyframes danmakuRoll{0%{transform:translateY(-50%) translateX(0)}100%{transform:translateY(-50%) translateX(-50%)}}
+
+  /* ── 火星漂浮贴纸 ── */
+  .mars-stickers{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:hidden}
+  .msticker{position:absolute;font-size:26px;animation-duration:12s;animation-timing-function:ease-in-out;animation-iteration-count:infinite;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4));opacity:.7}
+  .msticker:nth-child(1){top:8%;left:3%;animation-name:float1}
+  .msticker:nth-child(2){top:14%;right:4%;animation-name:float2;animation-delay:2s;font-size:20px}
+  .msticker:nth-child(3){top:25%;left:8%;animation-name:float3;animation-delay:4s;font-size:22px}
+  .msticker:nth-child(4){top:35%;right:6%;animation-name:float4;animation-delay:1s;font-size:28px}
+  .msticker:nth-child(5){top:50%;left:5%;animation-name:float1;animation-delay:3s;font-size:18px}
+  .msticker:nth-child(6){top:60%;right:3%;animation-name:float2;animation-delay:5s;font-size:24px}
+  .msticker:nth-child(7){top:72%;left:7%;animation-name:float3;animation-delay:6s;font-size:20px}
+  .msticker:nth-child(8){top:82%;right:5%;animation-name:float4;animation-delay:2s;font-size:22px}
+  @keyframes float1{0%,100%{transform:translateY(0) rotate(0) scale(1)}15%{transform:translateY(-12px) rotate(8deg) scale(1.1)}85%{transform:translateY(8px) rotate(-5deg) scale(.95)}}
+  @keyframes float2{0%,100%{transform:translateY(0) rotate(0) scale(1)}20%{transform:translateY(-10px) rotate(-6deg) scale(1.05)}80%{transform:translateY(12px) rotate(7deg) scale(.98)}}
+  @keyframes float3{0%,100%{transform:translateX(0) translateY(0)}25%{transform:translateX(6px) translateY(-8px) rotate(5deg)}75%{transform:translateX(-4px) translateY(10px) rotate(-3deg)}}
+  @keyframes float4{0%,100%{transform:translateY(0) scale(1);opacity:.7}50%{transform:translateY(-6px) scale(1.08);opacity:.9}}
+
+  /* ── 音乐播放器 ── */
+  .music-player{position:fixed;bottom:18px;right:18px;z-index:999;display:flex;align-items:center;gap:8px;background:rgba(15,5,10,.88);backdrop-filter:blur(16px);border:1px solid rgba(255,80,80,.4);border-radius:28px;padding:8px 12px 8px 10px;box-shadow:0 4px 20px rgba(0,0,0,.4);transition:all .3s;max-width:220px}
+  .music-player:hover{border-color:rgba(255,80,80,.7);transform:scale(1.02)}
+  .mp-icon{font-size:18px;animation:mpPulse 2s ease-in-out infinite;flex-shrink:0}
+  .mp-icon.playing{animation:mpPulse 1s ease-in-out infinite}
+  @keyframes mpPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
+  .mp-info{flex:1;min-width:0}
+  .mp-title{font-size:11px;color:#fff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mp-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:1px}
+  .mp-btns{display:flex;gap:4px;align-items:center;flex-shrink:0}
+  .mp-btn{width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+  .mp-btn.play{background:linear-gradient(135deg,#ff4444,#ff8a80);color:#fff}
+  .mp-btn.play:hover{transform:scale(1.12)}
+  .mp-btn.mute{background:rgba(255,255,255,.08);color:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.12)}
+  .mp-btn.mute:hover{background:rgba(255,255,255,.18)}
+  .mp-btn.mute.on{color:#ff6b6b;border-color:rgba(255,107,107,.4)}
+
+
+  /* ── 应援弹幕 ── */
+  .danmaku-bar{height:36px;margin-bottom:8px;overflow:hidden;border-radius:18px;background:rgba(0,0,0,.3);backdrop-filter:blur(6px);border:1px solid rgba(255,80,80,.18);flex-shrink:0}
+  .danmaku-track{position:absolute;top:50%;transform:translateY(-50%);white-space:nowrap;display:flex;align-items:center;gap:52px;animation:danmakuR 36s linear infinite}
+  .danmaku-track span{font-size:13px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6);font-weight:600}
+  .danmaku-track .dm-red{color:#ff6b6b}.danmaku-track .dm-gold{color:#ffd700}.danmaku-track .dm-pink{color:#ffb6c1}.danmaku-track .dm-cyan{color:#a8edea}
+  @keyframes danmakuR{0%{transform:translateY(-50%) translateX(0)}100%{transform:translateY(-50%) translateX(-50%)}}
+  /* ── 火星漂浮贴纸 ── */
+  .mars-stickers{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:hidden}
+  .msticker{position:absolute;font-size:24px;animation-duration:14s;animation-timing-function:ease-in-out;animation-iteration-count:infinite;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4));opacity:.65}
+  .msticker:nth-child(1){top:7%;left:3%;animation-name:f1}.msticker:nth-child(2){top:13%;right:4%;animation-name:f2;animation-delay:2s;font-size:18px}.msticker:nth-child(3){top:50%;left:2%;animation-name:f3;animation-delay:4s;font-size:16px}.msticker:nth-child(4){top:64%;right:3%;animation-name:f1;animation-delay:1s;font-size:22px}.msticker:nth-child(5){top:26%;right:5%;animation-name:f4;animation-delay:3s;font-size:17px}.msticker:nth-child(6){top:76%;left:5%;animation-name:f2;animation-delay:5s;font-size:20px}.msticker:nth-child(7){top:38%;left:3%;animation-name:f3;animation-delay:2.5s;font-size:18px}.msticker:nth-child(8){top:3%;left:48%;animation-name:f4;animation-delay:1.5s;font-size:19px}.msticker:nth-child(9){top:88%;right:4%;animation-name:f1;animation-delay:3.5s;font-size:17px}.msticker:nth-child(10){top:45%;right:2%;animation-name:f2;animation-delay:6s;font-size:15px}
+  @keyframes f1{0%,100%{transform:translateY(0) rotate(0) scale(1)}15%{transform:translateY(-12px) rotate(8deg) scale(1.1)}85%{transform:translateY(8px) rotate(-5deg) scale(.95)}}
+  @keyframes f2{0%,100%{transform:translateY(0) rotate(0) scale(1)}20%{transform:translateY(-10px) rotate(-6deg) scale(1.05)}80%{transform:translateY(12px) rotate(7deg) scale(.98)}}
+  @keyframes f3{0%,100%{transform:translateX(0) translateY(0)}25%{transform:translateX(6px) translateY(-8px) rotate(5deg)}75%{transform:translateX(-4px) translateY(10px) rotate(-3deg)}}
+  @keyframes f4{0%,100%{transform:translateY(0) scale(1);opacity:.65}50%{transform:translateY(-6px) scale(1.08);opacity:.85}}
+  /* ── 音乐播放器 ── */
+  .music-player{position:fixed;bottom:18px;right:18px;z-index:999;display:flex;align-items:center;gap:8px;background:rgba(15,5,10,.88);backdrop-filter:blur(16px);border:1px solid rgba(255,80,80,.35);border-radius:28px;padding:8px 12px 8px 10px;box-shadow:0 4px 20px rgba(0,0,0,.4);transition:all .3s;max-width:215px;cursor:pointer}
+  .music-player:hover{border-color:rgba(255,80,80,.65);transform:scale(1.02)}
+  .mp-icon{font-size:17px;animation:mpP 2s ease-in-out infinite;flex-shrink:0}
+  .mp-icon.playing{animation:mpP .9s ease-in-out infinite}
+  @keyframes mpP{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+  .mp-info{flex:1;min-width:0}
+  .mp-title{font-size:11px;color:#fff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mp-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:1px}
+  .mp-btns{display:flex;gap:4px;align-items:center;flex-shrink:0}
+  .mp-btn{width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+  .mp-btn.play{background:linear-gradient(135deg,#ff4444,#ff8a80);color:#fff}
+  .mp-btn.play:hover{transform:scale(1.12)}
+  .mp-btn.mute{background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.12)}
+  .mp-btn.mute:hover{background:rgba(255,255,255,.16)}
+  .mp-btn.mute.on{color:#ff6b6b;border-color:rgba(255,107,107,.4)}
+
+/* 24小时逐时预报 */
+.hourly-card{padding:12px 0!important}
+.hourly-scroll-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.hourly-scroll-wrap::-webkit-scrollbar{display:none}
+.hourly-scroll{display:flex;gap:4px;padding:0 12px}
+.hourly-item{flex-shrink:0;width:56px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border-radius:12px;background:rgba(255,255,255,.08);font-size:12px}
+.hourly-item.hourly-now{background:rgba(255,107,107,.2);border:1px solid rgba(255,107,107,.4)}
+.hourly-time{color:rgba(255,255,255,.7);font-size:11px}
+.hourly-icon{font-size:22px;line-height:1}
+.hourly-temp{font-weight:600;font-size:14px}
+.hourly-pop{color:#64b5f6;font-size:10px}
+
 </style>
 </head>
 <body>
 <!-- 华晨宇2025十佳造型背景轮播 -->
 <div class="bg-slideshow" id="bgSlideshow">
-  <div class="bg-slide" style="background-image:url('images/hcy_1.jpg')"></div>
-  <div class="bg-slide" style="background-image:url('images/hcy_2.jpg')"></div>
-  <div class="bg-slide" style="background-image:url('images/hcy_3.jpg')"></div>
-  <div class="bg-slide" style="background-image:url('images/hcy_4.jpg')"></div>
-  <div class="bg-slide" style="background-image:url('images/hcy_5.jpg')"></div>
-  <div class="bg-slide" style="background-image:url('images/hcy_6.jpg')"></div>
-  <div class="bg-slide" style="background-image:url('images/hcy_7.jpg')"></div>
-  <div class="bg-slide" style="background-image:url('images/hcy_8.jpg')"></div>
-  <div class="bg-slide" style="background-image:url('images/hcy_9.jpg')"></div>
+  <div class="bg-slide slide-1 active" style="background-image:url('img/bg1.jpg')"></div>
+  <div class="bg-slide slide-2" style="background-image:url('img/bg2.jpg')"></div>
+  <div class="bg-slide slide-3" style="background-image:url('img/bg3.jpg')"></div>
+  <div class="bg-slide slide-4" style="background-image:url('img/bg4.jpg')"></div>
+  <div class="bg-slide slide-5" style="background-image:url('img/bg5.jpg')"></div>
+  <div class="bg-slide slide-6" style="background-image:url('img/bg6.jpg')"></div>
+  <div class="bg-slide slide-7" style="background-image:url('img/bg7.jpg')"></div>
 </div>
+<div class="mars-stickers">
+    <span class="msticker">🔥</span>
+    <span class="msticker">🌹</span>
+    <span class="msticker">⭐</span>
+    <span class="msticker">🪐</span>
+    <span class="msticker">❤️</span>
+    <span class="msticker">🎵</span>
+    <span class="msticker">💫</span>
+    <span class="msticker">🎶</span>
+  </div>
 <div class="bg-overlay"></div>
 
 <div class="container">
@@ -589,6 +700,24 @@
     <h1>🌸 冰冰专属天气预报</h1>
     <div class="subtitle">欢迎回家 · 出门前先看看这些</div>
     <div class="mars-logo">MARS CONCERT</div>
+  </div>
+
+  <!-- 应援弹幕 -->
+  <div class="danmaku-bar">
+    <div class="danmaku-track">
+      <span>🔥 华晨宇火星演唱会</span>
+      <span>❤️ 我们永远陪你</span>
+      <span>🌟 火星人到家了</span>
+      <span>🎵 唱到宇宙尽头</span>
+      <span>🌹 你是最亮的星</span>
+      <span>💫 火星等你回家</span>
+      <span>🎶 每首歌都是约定</span>
+      <span>🪐 MARS CONCERT</span>
+      <span>🔥 华晨宇火星演唱会</span>
+      <span>❤️ 我们永远陪你</span>
+      <span>🌟 火星人到家了</span>
+      <span>🎵 唱到宇宙尽头</span>
+    </div>
   </div>
 
   <div class="city-search-bar">
@@ -836,7 +965,34 @@ function fmtDateLong(offset){
   return d.toLocaleDateString('zh-CN',{month:'long',day:'numeric',weekday:'long'});
 }
 
-function renderAll(todayData, tomorrowData, forecastData, cityName){
+function parseHourlyData(data){
+  if(!data||!data.hourly) return [];
+  const now=new Date();
+  const hours=data.hourly.time;
+  const temps=data.hourly.temperature_2m;
+  const codes=data.hourly.weathercode;
+  const pops=data.hourly.precipitation_probability;
+  const hums=data.hourly.relative_humidity_2m;
+  const winds=data.hourly.wind_speed_10m;
+  const result=[];
+  for(let i=0;i<hours.length;i++){
+    const t=new Date(hours[i]);
+    if(t<now){continue;}
+    result.push({
+      time:t.getHours()===0?'0点':t.getHours()+':00',
+      hour:t.getHours(),
+      temp:Math.round(temps[i]),
+      code:codes[i],
+      pop:pops?pops[i]:null,
+      hum:hums?hums[i]:null,
+      wind:winds?Math.round(winds[i]):null
+    });
+    if(result.length>=24) break;
+  }
+  return result;
+}
+
+function renderAll(todayData, tomorrowData, forecastData, cityName, hourlyData){
   const todayWmo=getWMO(todayData.weatherCode);
   const tomorrowWmo=getWMO(tomorrowData.weatherCode);
   const todayIdx=calcOutIndex(todayData);
@@ -927,6 +1083,31 @@ function renderAll(todayData, tomorrowData, forecastData, cityName){
     </div>
   </div>`;
 
+  // 24小时逐时预报
+  const hourlyItems=hourlyData||[];
+  if(hourlyItems.length>0){
+    html+=`
+  <div class="card hourly-card">
+    <div class="card-title">🕐 24小时预报</div>
+    <div class="hourly-scroll-wrap">
+      <div class="hourly-scroll">`;
+    hourlyItems.forEach((h,i)=>{
+      const icon=getWMO(h.code);
+      html+=`
+        <div class="hourly-item${i===0?' hourly-now':''}">
+          <div class="hourly-time">${i===0?'现在':h.time}</div>
+          <div class="hourly-icon">${icon.icon}</div>
+          <div class="hourly-temp">${h.temp}°</div>
+          ${h.pop!==null&&h.pop>0?`<div class="hourly-pop">${h.pop}%</div>`:''}
+        </div>`;
+    });
+    html+=`
+      </div>
+    </div>
+  </div>`;
+  }
+
+  
   // 未来15天折叠
   if(forecastData&&forecastData.length>0){
     html+=`
@@ -980,7 +1161,7 @@ function renderError(msg){
 async function fetchWeather(lat,lon,cityName){
   document.getElementById('content').innerHTML='<div class="loading"><div class="coal-ball"><div class="coal-flower"></div><div class="coal-body"><div class="coal-blush-l"></div><div class="coal-blush-r"></div></div></div><div class="coal-text">黑煤球正在获取天气...</div></div>';
   try{
-    const url=`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weathercode,wind_speed_10m_max,uv_index_max,sunrise,sunset,relative_humidity_2m_max,apparent_temperature_max,apparent_temperature_min,precipitation_sum&timezone=auto&forecast_days=16`;
+    const url=`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weathercode,wind_speed_10m_max,uv_index_max,sunrise,sunset,relative_humidity_2m_max,apparent_temperature_max,apparent_temperature_min,precipitation_sum&timezone=auto&forecast_days=16&hourly=temperature_2m,weathercode,precipitation_probability,relative_humidity_2m,wind_speed_10m`;
     const res=await fetch(url);
     if(!res.ok)throw new Error('天气API请求失败');
     const d=await res.json();
@@ -1000,7 +1181,9 @@ async function fetchWeather(lat,lon,cityName){
       });
     }
 
-    renderAll(todayData,tomorrowData,forecastData,cityName);
+    const hourlyData=parseHourlyData(d);
+
+    renderAll(todayData,tomorrowData,forecastData,cityName,hourlyData);
   }catch(e){
     console.error(e);
     renderError('获取天气数据失败，请检查网络后重试');
@@ -1121,5 +1304,83 @@ switchCity(0);
   }, 6000);
 })();
 </script>
+
+  <div class="music-player" id="musicPlayer">
+    <div class="mp-icon" id="mpIcon">🎵</div>
+    <div class="mp-info">
+      <div class="mp-title" id="mpTitle">好想爱这个世界啊</div>
+      <div class="mp-sub">华晨宇</div>
+    </div>
+    
+<script>
+    (function(){
+      var mp=document.getElementById('bgMusic');
+      var playBtn=document.getElementById('mpPlayBtn');
+      var muteBtn=document.getElementById('mpMuteBtn');
+      var mpIcon=document.getElementById('mpIcon');
+      var muted=false;
+      playBtn.onclick=function(e){
+        e.stopPropagation();
+        if(mp.paused){
+          mp.play().catch(function(){
+            alert('请先点击页面任意位置解除浏览器限制，再点击播放');
+          });
+          playBtn.textContent='⏸';
+          mpIcon.classList.add('playing');
+        }else{
+          mp.pause();
+          playBtn.textContent='▶';
+          mpIcon.classList.remove('playing');
+        }
+      };
+      muteBtn.onclick=function(e){
+        e.stopPropagation();
+        muted=!muted;
+        mp.muted=muted;
+        muteBtn.classList.toggle('on',muted);
+        muteBtn.textContent=muted?'🔇':'🔊';
+      };
+      document.getElementById('musicPlayer').addEventListener('click',function(){
+        if(mp.paused){
+          mp.play().catch(function(){
+            alert('请先点击页面任意位置解除浏览器限制，再点击播放');
+          });
+          playBtn.textContent='⏸';
+          mpIcon.classList.add('playing');
+        }else{
+          mp.pause();
+          playBtn.textContent='▶';
+          mpIcon.classList.remove('playing');
+        }
+      });
+    })();
+  </script>
+<div class="mp-btns">
+      <button class="mp-btn play" id="mpPlayBtn" title="播放/暂停">▶</button>
+      <button class="mp-btn mute" id="mpMuteBtn" title="静音">🔊</button>
+    </div>
+  </div>
+  <audio id="bgMusic" loop preload="none">
+    <source src="https://isure.stream.qqmusic.qq.com/M500001B7Up1vW3Dy.mp3?guid=ffffffff82def4e4&vkey=62D11F7A2F13C5E9F2A3C3F2E9B5A7D4C6E8F0A2B4D6C8E0A2B4D6C8E0A2B&uin=0&fromtag=999" type="audio/mpeg">
+  </audio>
+  
+
+
+  <div class="music-player" id="musicPlayer">
+    <div class="mp-icon" id="mpIcon">🎵</div>
+    <div class="mp-info">
+      <div class="mp-title">好想爱这个世界啊</div>
+      <div class="mp-sub">华晨宇</div>
+    </div>
+    <div class="mp-btns">
+      <button class="mp-btn play" id="mpPlayBtn">▶</button>
+      <button class="mp-btn mute" id="mpMuteBtn">🔊</button>
+    </div>
+  </div>
+  <audio id="bgMusic" loop preload="none">
+    <source src="https://isure.stream.qqmusic.qq.com/M500001B7Up1vW3Dy.mp3?guid=ffffffff82def4e4&vkey=62D11F7A2F13C5E9F2A3C3F2E9B5A7D4C6E8F0A2B4D6C8E0A2B4D6C8E0A2B&uin=0&fromtag=999" type="audio/mpeg">
+  </audio>
+  
+
 </body>
 </html>
