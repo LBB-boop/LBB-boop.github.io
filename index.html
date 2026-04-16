@@ -46,7 +46,7 @@
     top: 0; left: 0;
     width: 100%; height: 100%;
     z-index: -1;
-    background: linear-gradient(180deg, rgba(15,12,41,0.55) 0%, rgba(48,43,99,0.50) 40%, rgba(36,36,62,0.60) 100%);
+    background: linear-gradient(180deg, rgba(30,5,5,0.55) 0%, rgba(60,10,20,0.50) 40%, rgba(20,5,15,0.65) 100%);
     backdrop-filter: blur(2px);
   }
   .container {
@@ -61,9 +61,9 @@
     padding: 20px 0 10px;
   }
   .header h1 {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 700;
-    background: linear-gradient(90deg, #ffd700, #ff6b9d, #a8edea, #fed6e3);
+    background: linear-gradient(90deg, #ff4444, #ff8a80, #ffd700, #ff4444);
     background-size: 300% 100%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -78,8 +78,17 @@
   }
   .header .subtitle {
     font-size: 13px;
-    color: rgba(255,255,255,0.5);
+    color: rgba(255,200,200,0.6);
     margin-top: 4px;
+    font-style: italic;
+  }
+  /* 火星Logo */
+  .mars-logo {
+    font-size: 11px;
+    color: rgba(255,80,80,0.4);
+    letter-spacing: 4px;
+    margin-top: 6px;
+    text-transform: uppercase;
   }
 
   /* 城市搜索栏（整合定位+输入+查询） */
@@ -121,14 +130,15 @@
     padding: 10px 16px;
     border-radius: 12px;
     border: none;
-    background: linear-gradient(135deg, #a8edea, #fed6e3);
-    color: #333;
+    background: linear-gradient(135deg, #ff4444, #ff8a80);
+    color: #fff;
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
     transition: transform 0.2s;
     white-space: nowrap;
     flex-shrink: 0;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
   }
   .city-search-bar .search-btn:active { transform: scale(0.95); }
 
@@ -155,8 +165,8 @@
   }
   .city-tag:hover { background: rgba(255,255,255,0.12); color: #fff; }
   .city-tag.active {
-    background: linear-gradient(135deg, rgba(168,237,234,0.25), rgba(254,214,227,0.25));
-    border-color: rgba(254,214,227,0.4);
+    background: linear-gradient(135deg, rgba(255,68,68,0.3), rgba(255,138,128,0.25));
+    border-color: rgba(255,68,68,0.5);
     color: #fff;
     font-weight: 600;
   }
@@ -168,20 +178,86 @@
   }
   .city-tag .tag-close:hover { opacity: 1; }
 
-  /* 加载 */
+  /* 加载 - 黑煤球 */
   .loading {
     text-align: center;
     padding: 60px 0;
     font-size: 16px;
-    color: rgba(255,255,255,0.5);
+    color: rgba(255,200,200,0.6);
   }
-  .loading .spinner {
-    width: 40px; height: 40px;
-    border: 3px solid rgba(255,255,255,0.1);
-    border-top-color: #fed6e3;
+  .coal-ball {
+    position: relative;
+    width: 64px; height: 72px;
+    margin: 0 auto 20px;
+    animation: coalBounce 1.2s ease-in-out infinite;
+  }
+  .coal-body {
+    width: 56px; height: 56px;
+    background: radial-gradient(circle at 40% 35%, #444, #1a1a1a 60%, #0d0d0d);
     border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin: 0 auto 16px;
+    margin: 16px auto 0;
+    position: relative;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.5), inset 0 -4px 8px rgba(0,0,0,0.4), inset 0 4px 8px rgba(100,100,100,0.15);
+  }
+  .coal-body::before {
+    content: '';
+    position: absolute;
+    top: 14px; left: 12px;
+    width: 10px; height: 12px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 22px 0 0 0 #fff;
+  }
+  .coal-body::after {
+    content: '';
+    position: absolute;
+    top: 18px; left: 15px;
+    width: 5px; height: 5px;
+    background: #111;
+    border-radius: 50%;
+    box-shadow: 22px 0 0 0 #111;
+  }
+  /* 黑煤球头上的小红花 */
+  .coal-flower {
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 20px; height: 20px;
+    z-index: 2;
+  }
+  .coal-flower::before {
+    content: '🌸';
+    font-size: 16px;
+    position: absolute;
+    top: -4px; left: -4px;
+  }
+  .coal-flower::after {
+    content: '';
+    position: absolute;
+    top: 12px; left: 50%;
+    transform: translateX(-50%);
+    width: 2px; height: 8px;
+    background: #4caf50;
+    border-radius: 1px;
+  }
+  /* 黑煤球腮红 */
+  .coal-blush-l, .coal-blush-r {
+    position: absolute;
+    width: 10px; height: 6px;
+    background: rgba(255,100,100,0.35);
+    border-radius: 50%;
+    top: 30px;
+  }
+  .coal-blush-l { left: 4px; }
+  .coal-blush-r { right: 4px; }
+  @keyframes coalBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+  .loading .coal-text {
+    margin-top: 4px;
+    font-size: 14px;
+    color: rgba(255,150,150,0.7);
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -510,8 +586,9 @@
 
 <div class="container">
   <div class="header">
-    <h1>❄️ 冰冰专属天气预报</h1>
-    <div class="subtitle">出门前，先看看这些</div>
+    <h1>🌸 冰冰专属天气预报</h1>
+    <div class="subtitle">欢迎回家 · 出门前先看看这些</div>
+    <div class="mars-logo">MARS CONCERT</div>
   </div>
 
   <div class="city-search-bar">
@@ -523,12 +600,18 @@
 
   <div id="content">
     <div class="loading">
-      <div class="spinner"></div>
-      正在获取天气数据...
+      <div class="coal-ball">
+        <div class="coal-flower"></div>
+        <div class="coal-body">
+          <div class="coal-blush-l"></div>
+          <div class="coal-blush-r"></div>
+        </div>
+      </div>
+      <div class="coal-text">黑煤球正在获取天气...</div>
     </div>
   </div>
 
-  <div class="footer">数据来源：Open-Meteo · 仅供参考</div>
+  <div class="footer">🚀 火星人 · Open-Meteo · 仅供参考 · 欢迎回家</div>
 </div>
 
 <script>
@@ -895,7 +978,7 @@ function renderError(msg){
 }
 
 async function fetchWeather(lat,lon,cityName){
-  document.getElementById('content').innerHTML='<div class="loading"><div class="spinner"></div>正在获取天气数据...</div>';
+  document.getElementById('content').innerHTML='<div class="loading"><div class="coal-ball"><div class="coal-flower"></div><div class="coal-body"><div class="coal-blush-l"></div><div class="coal-blush-r"></div></div></div><div class="coal-text">黑煤球正在获取天气...</div></div>';
   try{
     const url=`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weathercode,wind_speed_10m_max,uv_index_max,sunrise,sunset,relative_humidity_2m_max,apparent_temperature_max,apparent_temperature_min,precipitation_sum&timezone=auto&forecast_days=16`;
     const res=await fetch(url);
@@ -969,7 +1052,7 @@ function removeCity(i){
 async function addCity(){
   const city=document.getElementById('cityInput').value.trim();
   if(!city)return;
-  document.getElementById('content').innerHTML='<div class="loading"><div class="spinner"></div>正在搜索城市...</div>';
+  document.getElementById('content').innerHTML='<div class="loading"><div class="coal-ball"><div class="coal-flower"></div><div class="coal-body"><div class="coal-blush-l"></div><div class="coal-blush-r"></div></div></div><div class="coal-text">黑煤球正在搜索城市...</div></div>';
   try{
     const geoUrl=`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=zh`;
     const geoRes=await fetch(geoUrl);
@@ -997,7 +1080,7 @@ async function addCity(){
 
 function locateMe(){
   if(!navigator.geolocation){renderError('您的浏览器不支持定位功能');return;}
-  document.getElementById('content').innerHTML='<div class="loading"><div class="spinner"></div>正在定位...</div>';
+  document.getElementById('content').innerHTML='<div class="loading"><div class="coal-ball"><div class="coal-flower"></div><div class="coal-body"><div class="coal-blush-l"></div><div class="coal-blush-r"></div></div></div><div class="coal-text">黑煤球正在定位...</div></div>';
   navigator.geolocation.getCurrentPosition(
     async(pos)=>{
       const name='📍 当前位置';
