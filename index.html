@@ -12,6 +12,42 @@
     background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
     color: #fff;
     overflow-x: hidden;
+    position: relative;
+  }
+
+  /* 华晨宇造型背景轮播 */
+  .bg-slideshow {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: -2;
+    overflow: hidden;
+  }
+  .bg-slideshow .bg-slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+    animation: bgKenBurns 20s ease-in-out infinite alternate;
+  }
+  .bg-slideshow .bg-slide.active {
+    opacity: 1;
+  }
+  @keyframes bgKenBurns {
+    0% { transform: scale(1.0); }
+    100% { transform: scale(1.06); }
+  }
+  .bg-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: -1;
+    background: linear-gradient(180deg, rgba(15,12,41,0.55) 0%, rgba(48,43,99,0.50) 40%, rgba(36,36,62,0.60) 100%);
+    backdrop-filter: blur(2px);
   }
   .container {
     max-width: 480px;
@@ -27,10 +63,18 @@
   .header h1 {
     font-size: 24px;
     font-weight: 700;
-    background: linear-gradient(90deg, #a8edea, #fed6e3);
+    background: linear-gradient(90deg, #ffd700, #ff6b9d, #a8edea, #fed6e3);
+    background-size: 300% 100%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     letter-spacing: 2px;
+    animation: headerShimmer 4s ease-in-out infinite;
+    text-shadow: none;
+  }
+  @keyframes headerShimmer {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
   }
   .header .subtitle {
     font-size: 13px;
@@ -114,6 +158,7 @@
     padding: 24px;
     margin-bottom: 16px;
     border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
   }
   .card .card-title {
     font-size: 14px;
@@ -198,6 +243,7 @@
     border-radius: 20px;
     padding: 18px;
     border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
   }
   .wt-card .wt-date {
     font-size: 13px;
@@ -413,6 +459,20 @@
 </style>
 </head>
 <body>
+<!-- 华晨宇2025十佳造型背景轮播 -->
+<div class="bg-slideshow" id="bgSlideshow">
+  <div class="bg-slide" style="background-image:url('images/hcy_1.jpg')"></div>
+  <div class="bg-slide" style="background-image:url('images/hcy_2.jpg')"></div>
+  <div class="bg-slide" style="background-image:url('images/hcy_3.jpg')"></div>
+  <div class="bg-slide" style="background-image:url('images/hcy_4.jpg')"></div>
+  <div class="bg-slide" style="background-image:url('images/hcy_5.jpg')"></div>
+  <div class="bg-slide" style="background-image:url('images/hcy_6.jpg')"></div>
+  <div class="bg-slide" style="background-image:url('images/hcy_7.jpg')"></div>
+  <div class="bg-slide" style="background-image:url('images/hcy_8.jpg')"></div>
+  <div class="bg-slide" style="background-image:url('images/hcy_9.jpg')"></div>
+</div>
+<div class="bg-overlay"></div>
+
 <div class="container">
   <div class="header">
     <h1>❄️ 冰冰专属天气预报</h1>
@@ -855,6 +915,19 @@ function locateMe(){
 }
 
 searchCity();
+
+// 华晨宇造型背景轮播
+(function(){
+  const slides = document.querySelectorAll('.bg-slide');
+  if(!slides.length) return;
+  let current = 0;
+  slides[0].classList.add('active');
+  setInterval(()=>{
+    slides[current].classList.remove('active');
+    current = (current + 1) % slides.length;
+    slides[current].classList.add('active');
+  }, 6000);
+})();
 </script>
 </body>
 </html>
