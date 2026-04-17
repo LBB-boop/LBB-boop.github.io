@@ -677,9 +677,27 @@
   from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
   to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
+
+/* iOS书签模式状态栏适配 - 顶部黑色条延伸状态栏 */
+body { padding-top: env(safe-area-inset-top); }
+.ios-statusbar-fake {
+  display: none; /* 默认隐藏，正常浏览器里不显示 */
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: env(safe-area-inset-top, 47px);
+  min-height: 47px; /* iPhone刘海屏默认状态栏高度 */
+  background: linear-gradient(to bottom, #000000 0%, #0d0d0d 60%, transparent 100%);
+  z-index: 9998;
+  pointer-events: none;
+}
+/* iOS bookmark/PWA 模式下显示（standalone表示从主屏打开） */
+@media (display-mode: standalone) {
+  .ios-statusbar-fake { display: block; }
+}
 </style>
 </head>
 <body>
+<div class="ios-statusbar-fake" aria-hidden="true"></div>
 <!-- 华晨宇2025十佳造型背景轮播 -->
 <div class="bg-slideshow" id="bgSlideshow">
   <div class="bg-slide slide-1" style="background-image:url('img/bg1.jpg')"></div>
