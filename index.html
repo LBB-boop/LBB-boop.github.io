@@ -628,7 +628,7 @@
 
 
   /* ── 应援弹幕 ── */
-  .danmaku-bar{height:36px;margin-bottom:8px;overflow:hidden;border-radius:18px;background:rgba(0,0,0,.3);backdrop-filter:blur(6px);border:1px solid rgba(255,80,80,.18);flex-shrink:0}
+  .danmaku-bar{position:fixed;top:0;left:0;right:0;z-index:1000;padding:6px 0;pointer-events:none;overflow:hidden}
   .danmaku-track{position:absolute;top:50%;transform:translateY(-50%);white-space:nowrap;display:flex;align-items:center;gap:52px;animation:danmakuR 36s linear infinite}
   .danmaku-track span{font-size:13px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6);font-weight:600}
   .danmaku-track .dm-red{color:#ff6b6b}.danmaku-track .dm-gold{color:#ffd700}.danmaku-track .dm-pink{color:#ffb6c1}.danmaku-track .dm-cyan{color:#a8edea}
@@ -669,6 +669,21 @@
 .hourly-icon{font-size:22px;line-height:1}
 .hourly-temp{font-weight:600;font-size:14px}
 .hourly-pop{color:#64b5f6;font-size:10px}
+
+
+/* 下雨弹窗 */
+.rain-popup-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:9999}
+.rain-popup{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:16px;padding:24px 28px;text-align:center;z-index:10000;box-shadow:0 8px 32px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.1)}
+.rain-popup-icon{font-size:48px;margin-bottom:12px}
+.rain-popup-title{font-size:18px;font-weight:600;color:#fff;margin-bottom:8px}
+.rain-popup-msg{color:rgba(255,255,255,.8);font-size:14px;margin-bottom:20px;line-height:1.6}
+.rain-popup-msg small{color:#64b5f6}
+.rain-popup-btns{display:flex;gap:12px;justify-content:center}
+.rain-btn{padding:10px 20px;border-radius:8px;border:none;cursor:pointer;font-size:14px;transition:all .2s}
+.rain-btn-today{background:rgba(255,255,255,.1);color:#fff}
+.rain-btn-today:hover{background:rgba(255,255,255,.2)}
+.rain-btn-close{background:#ff6b6b;color:#fff}
+.rain-btn-close:hover{background:#ff5252}
 
 </style>
 </head>
@@ -713,6 +728,18 @@
       <span>💫 火星等你回家</span>
       <span>🎶 每首歌都是约定</span>
       <span>🪐 MARS CONCERT</span>
+      <span>🎸 四专来了</span>
+      <span>🎤 花花冲鸭</span>
+      <span>✨ 火星撞地球</span>
+      <span>🎭 疯人院里有你有我</span>
+      <span>🌈 彩虹是你的颜色</span>
+      <span>🎪 异类也是同类</span>
+      <span>🌙 好想爱这个世界啊</span>
+      <span>⭐ 新世界</span>
+      <span>🔥 齐天</span>
+      <span>❤️ 寻</span>
+      <span>🌟 国王与乞丐</span>
+      <span>💫 七叔</span>
       <span>🔥 华晨宇火星演唱会</span>
       <span>❤️ 我们永远陪你</span>
       <span>🌟 火星人到家了</span>
@@ -1183,6 +1210,7 @@ async function fetchWeather(lat,lon,cityName){
 
     const hourlyData=parseHourlyData(d);
 
+    checkRainPopup(d);
     renderAll(todayData,tomorrowData,forecastData,cityName,hourlyData);
   }catch(e){
     console.error(e);
@@ -1312,7 +1340,37 @@ switchCity(0);
       <div class="mp-sub">华晨宇</div>
     </div>
     
-<script>
+
+<div class="mp-btns">
+      <button class="mp-btn play" id="mpPlayBtn" title="播放/暂停">▶</button>
+      <button class="mp-btn mute" id="mpMuteBtn" title="静音">🔊</button>
+    </div>
+  </div>
+  <audio id="bgMusic" loop preload="none">
+    <source src="https://music.163.com/song/media/outer/url?id=1427962121.mp3" type="audio/mpeg">
+    <source src="https://m10.music.126.net/music/ulink.netease.com/file?hash=d7d8e6f3a0c6f4e2b8e9c3a1f5d7b2e4&extension=.mp3" type="audio/mpeg">
+  </audio>>
+  
+
+
+  <div class="music-player" id="musicPlayer">
+    <div class="mp-icon" id="mpIcon">🎵</div>
+    <div class="mp-info">
+      <div class="mp-title">好想爱这个世界啊</div>
+      <div class="mp-sub">华晨宇</div>
+    </div>
+    <div class="mp-btns">
+      <button class="mp-btn play" id="mpPlayBtn">▶</button>
+      <button class="mp-btn mute" id="mpMuteBtn">🔊</button>
+    </div>
+  </div>
+  <audio id="bgMusic" loop preload="none">
+    <source src="https://isure.stream.qqmusic.qq.com/M500001B7Up1vW3Dy.mp3?guid=ffffffff82def4e4&vkey=62D11F7A2F13C5E9F2A3C3F2E9B5A7D4C6E8F0A2B4D6C8E0A2B4D6C8E0A2B&uin=0&fromtag=999" type="audio/mpeg">
+  </audio>
+  
+
+
+  <script>
     (function(){
       var mp=document.getElementById('bgMusic');
       var playBtn=document.getElementById('mpPlayBtn');
@@ -1355,32 +1413,5 @@ switchCity(0);
       });
     })();
   </script>
-<div class="mp-btns">
-      <button class="mp-btn play" id="mpPlayBtn" title="播放/暂停">▶</button>
-      <button class="mp-btn mute" id="mpMuteBtn" title="静音">🔊</button>
-    </div>
-  </div>
-  <audio id="bgMusic" loop preload="none">
-    <source src="https://isure.stream.qqmusic.qq.com/M500001B7Up1vW3Dy.mp3?guid=ffffffff82def4e4&vkey=62D11F7A2F13C5E9F2A3C3F2E9B5A7D4C6E8F0A2B4D6C8E0A2B4D6C8E0A2B&uin=0&fromtag=999" type="audio/mpeg">
-  </audio>
-  
-
-
-  <div class="music-player" id="musicPlayer">
-    <div class="mp-icon" id="mpIcon">🎵</div>
-    <div class="mp-info">
-      <div class="mp-title">好想爱这个世界啊</div>
-      <div class="mp-sub">华晨宇</div>
-    </div>
-    <div class="mp-btns">
-      <button class="mp-btn play" id="mpPlayBtn">▶</button>
-      <button class="mp-btn mute" id="mpMuteBtn">🔊</button>
-    </div>
-  </div>
-  <audio id="bgMusic" loop preload="none">
-    <source src="https://isure.stream.qqmusic.qq.com/M500001B7Up1vW3Dy.mp3?guid=ffffffff82def4e4&vkey=62D11F7A2F13C5E9F2A3C3F2E9B5A7D4C6E8F0A2B4D6C8E0A2B4D6C8E0A2B&uin=0&fromtag=999" type="audio/mpeg">
-  </audio>
-  
-
 </body>
 </html>
