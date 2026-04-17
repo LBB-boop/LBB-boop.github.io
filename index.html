@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<html lang="zh-CN"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>冰冰专属天气预报</title>
@@ -46,8 +44,8 @@
     top: 0; left: 0;
     width: 100%; height: 100%;
     z-index: -1;
-    background: linear-gradient(180deg, rgba(30,5,5,0.55) 0%, rgba(60,10,20,0.50) 40%, rgba(20,5,15,0.65) 100%);
-    backdrop-filter: blur(2px);
+    background: linear-gradient(180deg, rgba(30,5,5,0.18) 0%, rgba(60,10,20,0.12) 40%, rgba(20,5,15,0.18) 100%);
+    backdrop-filter: blur(1px);
   }
   .container {
     max-width: 480px;
@@ -568,81 +566,51 @@
   }
   .error-card .err-icon { font-size: 40px; margin-bottom: 8px; }
 
-  /* ── 应援弹幕 ── */
+  /* ── 应援弹幕（透明版）── */
   .danmaku-bar {
-    height: 38px;
+    height: 36px;
     margin-bottom: 8px;
     overflow: hidden;
-    border-radius: 19px;
-    background: rgba(0,0,0,0.35);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255,80,80,0.2);
     flex-shrink: 0;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
   }
   .danmaku-track {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
     white-space: nowrap;
     display: flex;
     align-items: center;
     gap: 48px;
-    animation: danmakuRoll 32s linear infinite;
+    animation: danmakuRoll 35s linear infinite;
+    width: max-content;
   }
-  .danmaku-track span{font-size:13px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.7);font-weight:600;letter-spacing:.5px}
+  .danmaku-track span {
+    font-size: 14px;
+    color: rgba(255,255,255,0.75);
+    text-shadow: 0 0 8px rgba(255,107,53,0.8);
+    font-weight: 600;
+    letter-spacing: .5px;
+  }
   .danmaku-track .dm-red{color:#ff6b6b}.danmaku-track .dm-gold{color:#ffd700}.danmaku-track .dm-pink{color:#ffb6c1}.danmaku-track .dm-cyan{color:#a8edea}
-  @keyframes danmakuRoll{0%{transform:translateY(-50%) translateX(0)}100%{transform:translateY(-50%) translateX(-50%)}}
+  @keyframes danmakuRoll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
-  /* ── 火星漂浮贴纸 ── */
-  .mars-stickers{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:hidden}
-  .msticker{position:absolute;font-size:26px;animation-duration:12s;animation-timing-function:ease-in-out;animation-iteration-count:infinite;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4));opacity:.7}
-  .msticker:nth-child(1){top:8%;left:3%;animation-name:float1}
-  .msticker:nth-child(2){top:14%;right:4%;animation-name:float2;animation-delay:2s;font-size:20px}
-  .msticker:nth-child(3){top:25%;left:8%;animation-name:float3;animation-delay:4s;font-size:22px}
-  .msticker:nth-child(4){top:35%;right:6%;animation-name:float4;animation-delay:1s;font-size:28px}
-  .msticker:nth-child(5){top:50%;left:5%;animation-name:float1;animation-delay:3s;font-size:18px}
-  .msticker:nth-child(6){top:60%;right:3%;animation-name:float2;animation-delay:5s;font-size:24px}
-  .msticker:nth-child(7){top:72%;left:7%;animation-name:float3;animation-delay:6s;font-size:20px}
-  .msticker:nth-child(8){top:82%;right:5%;animation-name:float4;animation-delay:2s;font-size:22px}
-  @keyframes float1{0%,100%{transform:translateY(0) rotate(0) scale(1)}15%{transform:translateY(-12px) rotate(8deg) scale(1.1)}85%{transform:translateY(8px) rotate(-5deg) scale(.95)}}
-  @keyframes float2{0%,100%{transform:translateY(0) rotate(0) scale(1)}20%{transform:translateY(-10px) rotate(-6deg) scale(1.05)}80%{transform:translateY(12px) rotate(7deg) scale(.98)}}
-  @keyframes float3{0%,100%{transform:translateX(0) translateY(0)}25%{transform:translateX(6px) translateY(-8px) rotate(5deg)}75%{transform:translateX(-4px) translateY(10px) rotate(-3deg)}}
-  @keyframes float4{0%,100%{transform:translateY(0) scale(1);opacity:.7}50%{transform:translateY(-6px) scale(1.08);opacity:.9}}
-
-  /* ── 音乐播放器 ── */
-  .music-player{position:fixed;bottom:18px;right:18px;z-index:999;display:flex;align-items:center;gap:8px;background:rgba(15,5,10,.88);backdrop-filter:blur(16px);border:1px solid rgba(255,80,80,.4);border-radius:28px;padding:8px 12px 8px 10px;box-shadow:0 4px 20px rgba(0,0,0,.4);transition:all .3s;max-width:220px}
-  .music-player:hover{border-color:rgba(255,80,80,.7);transform:scale(1.02)}
-  .mp-icon{font-size:18px;animation:mpPulse 2s ease-in-out infinite;flex-shrink:0}
-  .mp-icon.playing{animation:mpPulse 1s ease-in-out infinite}
-  @keyframes mpPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
-  .mp-info{flex:1;min-width:0}
-  .mp-title{font-size:11px;color:#fff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .mp-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:1px}
-  .mp-btns{display:flex;gap:4px;align-items:center;flex-shrink:0}
-  .mp-btn{width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .2s}
-  .mp-btn.play{background:linear-gradient(135deg,#ff4444,#ff8a80);color:#fff}
-  .mp-btn.play:hover{transform:scale(1.12)}
-  .mp-btn.mute{background:rgba(255,255,255,.08);color:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.12)}
-  .mp-btn.mute:hover{background:rgba(255,255,255,.18)}
-  .mp-btn.mute.on{color:#ff6b6b;border-color:rgba(255,107,107,.4)}
-
-
-  /* ── 应援弹幕 ── */
-  .danmaku-bar{height:36px;margin-bottom:8px;overflow:hidden;border-radius:18px;background:rgba(0,0,0,.3);backdrop-filter:blur(6px);border:1px solid rgba(255,80,80,.18);flex-shrink:0}
-  .danmaku-track{position:absolute;top:50%;transform:translateY(-50%);white-space:nowrap;display:flex;align-items:center;gap:52px;animation:danmakuR 36s linear infinite}
-  .danmaku-track span{font-size:13px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6);font-weight:600}
-  .danmaku-track .dm-red{color:#ff6b6b}.danmaku-track .dm-gold{color:#ffd700}.danmaku-track .dm-pink{color:#ffb6c1}.danmaku-track .dm-cyan{color:#a8edea}
-  @keyframes danmakuR{0%{transform:translateY(-50%) translateX(0)}100%{transform:translateY(-50%) translateX(-50%)}}
   /* ── 火星漂浮贴纸 ── */
   .mars-stickers{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:hidden}
   .msticker{position:absolute;font-size:24px;animation-duration:14s;animation-timing-function:ease-in-out;animation-iteration-count:infinite;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4));opacity:.65}
-  .msticker:nth-child(1){top:7%;left:3%;animation-name:f1}.msticker:nth-child(2){top:13%;right:4%;animation-name:f2;animation-delay:2s;font-size:18px}.msticker:nth-child(3){top:50%;left:2%;animation-name:f3;animation-delay:4s;font-size:16px}.msticker:nth-child(4){top:64%;right:3%;animation-name:f1;animation-delay:1s;font-size:22px}.msticker:nth-child(5){top:26%;right:5%;animation-name:f4;animation-delay:3s;font-size:17px}.msticker:nth-child(6){top:76%;left:5%;animation-name:f2;animation-delay:5s;font-size:20px}.msticker:nth-child(7){top:38%;left:3%;animation-name:f3;animation-delay:2.5s;font-size:18px}.msticker:nth-child(8){top:3%;left:48%;animation-name:f4;animation-delay:1.5s;font-size:19px}.msticker:nth-child(9){top:88%;right:4%;animation-name:f1;animation-delay:3.5s;font-size:17px}.msticker:nth-child(10){top:45%;right:2%;animation-name:f2;animation-delay:6s;font-size:15px}
-  @keyframes f1{0%,100%{transform:translateY(0) rotate(0) scale(1)}15%{transform:translateY(-12px) rotate(8deg) scale(1.1)}85%{transform:translateY(8px) rotate(-5deg) scale(.95)}}
-  @keyframes f2{0%,100%{transform:translateY(0) rotate(0) scale(1)}20%{transform:translateY(-10px) rotate(-6deg) scale(1.05)}80%{transform:translateY(12px) rotate(7deg) scale(.98)}}
-  @keyframes f3{0%,100%{transform:translateX(0) translateY(0)}25%{transform:translateX(6px) translateY(-8px) rotate(5deg)}75%{transform:translateX(-4px) translateY(10px) rotate(-3deg)}}
-  @keyframes f4{0%,100%{transform:translateY(0) scale(1);opacity:.65}50%{transform:translateY(-6px) scale(1.08);opacity:.85}}
+  .msticker:nth-child(1){top:5%;left:2%;animation-name:f1}.msticker:nth-child(2){top:10%;right:3%;animation-name:f2;animation-delay:2s;font-size:18px}.msticker:nth-child(3){top:45%;left:1%;animation-name:f3;animation-delay:4s;font-size:16px}.msticker:nth-child(4){top:58%;right:2%;animation-name:f1;animation-delay:1s;font-size:22px}.msticker:nth-child(5){top:22%;right:4%;animation-name:f4;animation-delay:3s;font-size:17px}.msticker:nth-child(6){top:70%;left:3%;animation-name:f2;animation-delay:5s;font-size:20px}.msticker:nth-child(7){top:33%;left:2%;animation-name:f3;animation-delay:2.5s;font-size:18px}.msticker:nth-child(8){top:2%;left:45%;animation-name:f4;animation-delay:1.5s;font-size:19px}.msticker:nth-child(9){top:82%;right:3%;animation-name:f1;animation-delay:3.5s;font-size:17px}.msticker:nth-child(10){top:40%;right:1%;animation-name:f2;animation-delay:6s;font-size:15px}
+  @keyframes f1{0%,100%{transform:translateY(0) rotate(0) scale(1)}15%{transform:translateY(-28px) rotate(12deg) scale(1.15)}85%{transform:translateY(20px) rotate(-8deg) scale(.92)}}
+  @keyframes f2{0%,100%{transform:translateY(0) rotate(0) scale(1)}20%{transform:translateY(-22px) rotate(-10deg) scale(1.08)}80%{transform:translateY(26px) rotate(10deg) scale(.95)}}
+  @keyframes f3{0%,100%{transform:translateX(0) translateY(0)}25%{transform:translateX(16px) translateY(-18px) rotate(8deg)}75%{transform:translateX(-12px) translateY(22px) rotate(-5deg)}}
+  @keyframes f4{0%,100%{transform:translateY(0) scale(1);opacity:.65}50%{transform:translateY(-14px) scale(1.12);opacity:.88}}
+
   /* ── 音乐播放器 ── */
-  .music-player{position:fixed;bottom:18px;right:18px;z-index:999;display:flex;align-items:center;gap:8px;background:rgba(15,5,10,.88);backdrop-filter:blur(16px);border:1px solid rgba(255,80,80,.35);border-radius:28px;padding:8px 12px 8px 10px;box-shadow:0 4px 20px rgba(0,0,0,.4);transition:all .3s;max-width:215px;cursor:pointer}
+  .music-player{position:fixed;bottom:18px;right:18px;z-index:999;display:flex;align-items:center;gap:8px;background:rgba(15,5,10,.88);backdrop-filter:blur(16px);border:1px solid rgba(255,80,80,.35);border-radius:28px;padding:8px 12px 8px 10px;box-shadow:0 4px 20px rgba(0,0,0,.4);transition:all .3s;max-width:260px;cursor:pointer}
   .music-player:hover{border-color:rgba(255,80,80,.65);transform:scale(1.02)}
   .mp-icon{font-size:17px;animation:mpP 2s ease-in-out infinite;flex-shrink:0}
   .mp-icon.playing{animation:mpP .9s ease-in-out infinite}
@@ -657,6 +625,8 @@
   .mp-btn.mute{background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.12)}
   .mp-btn.mute:hover{background:rgba(255,255,255,.16)}
   .mp-btn.mute.on{color:#ff6b6b;border-color:rgba(255,107,107,.4)}
+  .mp-btn.prev,.mp-btn.next{background:rgba(255,255,255,.08);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.12)}
+  .mp-btn.prev:hover,.mp-btn.next:hover{background:rgba(255,107,53,.4);color:#fff}
 
 /* 24小时逐时预报 */
 .hourly-card{padding:12px 0!important}
@@ -675,11 +645,11 @@
 <body>
 <!-- 华晨宇2025十佳造型背景轮播 -->
 <div class="bg-slideshow" id="bgSlideshow">
-  <div class="bg-slide slide-1 active" style="background-image:url('img/bg1.jpg')"></div>
+  <div class="bg-slide slide-1" style="background-image:url('img/bg1.jpg')"></div>
   <div class="bg-slide slide-2" style="background-image:url('img/bg2.jpg')"></div>
   <div class="bg-slide slide-3" style="background-image:url('img/bg3.jpg')"></div>
   <div class="bg-slide slide-4" style="background-image:url('img/bg4.jpg')"></div>
-  <div class="bg-slide slide-5" style="background-image:url('img/bg5.jpg')"></div>
+  <div class="bg-slide slide-5 active" style="background-image:url('img/bg5.jpg')"></div>
   <div class="bg-slide slide-6" style="background-image:url('img/bg6.jpg')"></div>
   <div class="bg-slide slide-7" style="background-image:url('img/bg7.jpg')"></div>
 </div>
@@ -692,6 +662,8 @@
     <span class="msticker">🎵</span>
     <span class="msticker">💫</span>
     <span class="msticker">🎶</span>
+    <span class="msticker">🌸</span>
+    <span class="msticker">🎤</span>
   </div>
 <div class="bg-overlay"></div>
 
@@ -717,6 +689,19 @@
       <span>❤️ 我们永远陪你</span>
       <span>🌟 火星人到家了</span>
       <span>🎵 唱到宇宙尽头</span>
+    
+      <span>🔥 华晨宇火星演唱会</span>
+      <span>❤️ 我们永远陪你</span>
+      <span>🌟 火星人到家了</span>
+      <span>🎵 唱到宇宙尽头</span>
+      <span>🌹 你是最亮的星</span>
+      <span>💫 火星等你回家</span>
+      <span>🎶 每首歌都是约定</span>
+      <span>🪐 MARS CONCERT</span>
+      <span>🔥 华晨宇火星演唱会</span>
+      <span>❤️ 我们永远陪你</span>
+      <span>🌟 火星人到家了</span>
+      <span>🎵 唱到宇宙尽头</span>
     </div>
   </div>
 
@@ -725,20 +710,383 @@
     <input id="cityInput" type="text" placeholder="输入城市名，如：武汉" onkeydown="if(event.key==='Enter')addCity()">
     <button class="search-btn" onclick="addCity()">添加</button>
   </div>
-  <div class="city-tags" id="cityTags"></div>
+  <div class="city-tags" id="cityTags"><div class="city-tag active" onclick="switchCity(0)">
+      <span>应城</span></div></div>
 
   <div id="content">
-    <div class="loading">
-      <div class="coal-ball">
-        <div class="coal-flower"></div>
-        <div class="coal-body">
-          <div class="coal-blush-l"></div>
-          <div class="coal-blush-r"></div>
-        </div>
+  <div class="card index-card">
+    <div class="card-title">📊 出门指数 · 应城</div>
+    <div class="index-row">
+      <div class="index-col">
+        <div class="col-label">今天</div>
+        <div class="index-score" style="color:#ffc107">63</div>
+        <div class="index-label" style="color:#ffc107">一般</div>
+        <div class="index-desc">有小状况，注意提醒事项。</div>
       </div>
-      <div class="coal-text">黑煤球正在获取天气...</div>
+      <div class="index-col">
+        <div class="col-label">明天</div>
+        <div class="index-score" style="color:#8bc34a">73</div>
+        <div class="index-label" style="color:#8bc34a">适宜出门</div>
+        <div class="index-desc">天气不错，正常出行。</div>
+      </div>
+    </div>
+    <div class="index-bars">
+      <div class="index-bar-item">
+        <div class="bar-icon">👗</div>
+        <div class="bar-label">明日穿衣</div>
+        <div class="bar-track"><div class="bar-fill" style="width:90%;background:#4caf50"></div></div>
+        <div class="bar-val">适宜</div>
+      </div>
+      <div class="index-bar-item">
+        <div class="bar-icon">🏃</div>
+        <div class="bar-label">明日运动</div>
+        <div class="bar-track"><div class="bar-fill" style="width:80%;background:#4caf50"></div></div>
+        <div class="bar-val">适宜</div>
+      </div>
+      <div class="index-bar-item">
+        <div class="bar-icon">🧺</div>
+        <div class="bar-label">明日晾晒</div>
+        <div class="bar-track"><div class="bar-fill" style="width:60%;background:#ffc107"></div></div>
+        <div class="bar-val">一般</div>
+      </div>
     </div>
   </div>
+  <div class="weather-today-tomorrow">
+    <div class="wt-card">
+      <div class="wt-date">4/17周五 <span class="wt-tag today">今天</span></div>
+      <div class="wt-main">
+        <div class="wt-icon">🌫️</div>
+        <div class="wt-temp">
+          <div class="temp-range">15<span class="unit">°</span> / 26<span class="unit">°C</span></div>
+          <div class="weather-desc">雾</div>
+          <div class="feels-like">体感 17°~29°C</div>
+        </div>
+      </div>
+      <div class="wt-details">
+        <div class="wt-detail-item"><div class="dd-icon">🌧️</div><div class="dd-val">3%</div><div class="dd-label">降雨</div></div>
+        <div class="wt-detail-item"><div class="dd-icon">💨</div><div class="dd-val">5</div><div class="dd-label">微风</div></div>
+        <div class="wt-detail-item"><div class="dd-icon">☀️</div><div class="dd-val">7.4</div><div class="dd-label">UV</div></div>
+        <div class="wt-detail-item"><div class="dd-icon">💧</div><div class="dd-val">98%</div><div class="dd-label">湿度</div></div>
+      </div>
+    </div>
+    <div class="wt-card">
+      <div class="wt-date">4/18周六 <span class="wt-tag tomorrow">明天</span></div>
+      <div class="wt-main">
+        <div class="wt-icon">☁️</div>
+        <div class="wt-temp">
+          <div class="temp-range">17<span class="unit">°</span> / 27<span class="unit">°C</span></div>
+          <div class="weather-desc">阴天</div>
+          <div class="feels-like">体感 20°~29°C</div>
+        </div>
+      </div>
+      <div class="wt-details">
+        <div class="wt-detail-item"><div class="dd-icon">🌧️</div><div class="dd-val">3%</div><div class="dd-label">降雨</div></div>
+        <div class="wt-detail-item"><div class="dd-icon">💨</div><div class="dd-val">9</div><div class="dd-label">轻风</div></div>
+        <div class="wt-detail-item"><div class="dd-icon">☀️</div><div class="dd-val">7.8</div><div class="dd-label">UV</div></div>
+        <div class="wt-detail-item"><div class="dd-icon">💧</div><div class="dd-val">94%</div><div class="dd-label">湿度</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="card hourly-card">
+    <div class="card-title">🕐 24小时预报</div>
+    <div class="hourly-scroll-wrap">
+      <div class="hourly-scroll">
+        <div class="hourly-item hourly-now">
+          <div class="hourly-time">现在</div>
+          <div class="hourly-icon">☁️</div>
+          <div class="hourly-temp">26°</div>
+        </div>
+        <div class="hourly-item">
+          <div class="hourly-time">16:00</div>
+          <div class="hourly-icon">☁️</div>
+          <div class="hourly-temp">25°</div>
+        </div>
+        <div class="hourly-item">
+          <div class="hourly-time">17:00</div>
+          <div class="hourly-icon">☁️</div>
+          <div class="hourly-temp">25°</div>
+        </div>
+        <div class="hourly-item">
+          <div class="hourly-time">18:00</div>
+          <div class="hourly-icon">☁️</div>
+          <div class="hourly-temp">24°</div>
+          <div class="hourly-pop">3%</div>
+        </div>
+        <div class="hourly-item">
+          <div class="hourly-time">19:00</div>
+          <div class="hourly-icon">☁️</div>
+          <div class="hourly-temp">22°</div>
+        </div>
+        <div class="hourly-item">
+          <div class="hourly-time">20:00</div>
+          <div class="hourly-icon">☁️</div>
+          <div class="hourly-temp">21°</div>
+        </div>
+        <div class="hourly-item">
+          <div class="hourly-time">21:00</div>
+          <div class="hourly-icon">⛅</div>
+          <div class="hourly-temp">21°</div>
+        </div>
+        <div class="hourly-item">
+          <div class="hourly-time">22:00</div>
+          <div class="hourly-icon">☁️</div>
+          <div class="hourly-temp">21°</div>
+        </div>
+        <div class="hourly-item">
+          <div class="hourly-time">23:00</div>
+          <div class="hourly-icon">☁️</div>
+          <div class="hourly-temp">20°</div>
+        </div>
+        <div class="hourly-item">
+          <div class="hourly-time">0点</div>
+          <div class="hourly-icon">☁️</div>
+          <div class="hourly-temp">20°</div>
+        </div>
+        <div class="hourly-item">
+          <div class="hourly-time">1:00</div>
+          <div class="hourly-icon">⛅</div>
+          <div class="hourly-temp">20°</div>
+        </div>
+        <div class="hourly-item">
+          <div class="hourly-time">2:00</div>
+          <div class="hourly-icon">☁️</div>
+          <div class="hourly-temp">19°</div>
+        </div>
+        <div class="hourly-item">
+          <div class="hourly-time">3:00</div>
+          <div class="hourly-icon">⛅</div>
+          <div class="hourly-temp">19°</div>
+        </div>
+        <div class="hourly-item">
+          <div class="hourly-time">4:00</div>
+          <div class="hourly-icon">🌤️</div>
+          <div class="hourly-temp">19°</div>
+        </div>
+        <div class="hourly-item">
+          <div class="hourly-time">5:00</div>
+          <div class="hourly-icon">🌤️</div>
+          <div class="hourly-temp">18°</div>
+        </div>
+        <div class="hourly-item">
+          <div class="hourly-time">6:00</div>
+          <div class="hourly-icon">🌤️</div>
+          <div class="hourly-temp">17°</div>
+        </div>
+        <div class="hourly-item">
+          <div class="hourly-time">7:00</div>
+          <div class="hourly-icon">☀️</div>
+          <div class="hourly-temp">18°</div>
+        </div>
+        <div class="hourly-item">
+          <div class="hourly-time">8:00</div>
+          <div class="hourly-icon">🌤️</div>
+          <div class="hourly-temp">19°</div>
+        </div>
+        <div class="hourly-item">
+          <div class="hourly-time">9:00</div>
+          <div class="hourly-icon">☀️</div>
+          <div class="hourly-temp">22°</div>
+        </div>
+        <div class="hourly-item">
+          <div class="hourly-time">10:00</div>
+          <div class="hourly-icon">🌤️</div>
+          <div class="hourly-temp">24°</div>
+        </div>
+        <div class="hourly-item">
+          <div class="hourly-time">11:00</div>
+          <div class="hourly-icon">⛅</div>
+          <div class="hourly-temp">25°</div>
+        </div>
+        <div class="hourly-item">
+          <div class="hourly-time">12:00</div>
+          <div class="hourly-icon">🌤️</div>
+          <div class="hourly-temp">26°</div>
+        </div>
+        <div class="hourly-item">
+          <div class="hourly-time">13:00</div>
+          <div class="hourly-icon">⛅</div>
+          <div class="hourly-temp">27°</div>
+        </div>
+        <div class="hourly-item">
+          <div class="hourly-time">14:00</div>
+          <div class="hourly-icon">⛅</div>
+          <div class="hourly-temp">27°</div>
+          <div class="hourly-pop">3%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+    <button class="forecast-collapse-btn" onclick="toggleForecast(this)">
+      📅 未来 14 天天气预报 <span class="arrow">▼</span>
+    </button>
+    <div class="forecast-list" id="forecastList">
+      <div class="forecast-item">
+          <div class="fc-date">4/19周日</div>
+          <div class="fc-icon">☁️</div>
+          <div class="fc-desc">阴天</div>
+          <div class="fc-temp"><span class="fc-lo">17°</span> / 28°C</div>
+        </div><div class="forecast-item">
+          <div class="fc-date">4/20周一</div>
+          <div class="fc-icon">🌦️</div>
+          <div class="fc-desc">小阵雨</div>
+          <div class="fc-temp"><span class="fc-lo">10°</span> / 22°C</div>
+        </div><div class="forecast-item">
+          <div class="fc-date">4/21周二</div>
+          <div class="fc-icon">🌧️</div>
+          <div class="fc-desc">中雨</div>
+          <div class="fc-temp"><span class="fc-lo">9°</span> / 11°C</div>
+        </div><div class="forecast-item">
+          <div class="fc-date">4/22周三</div>
+          <div class="fc-icon">🌧️</div>
+          <div class="fc-desc">小雨</div>
+          <div class="fc-temp"><span class="fc-lo">10°</span> / 19°C</div>
+        </div><div class="forecast-item">
+          <div class="fc-date">4/23周四</div>
+          <div class="fc-icon">☁️</div>
+          <div class="fc-desc">阴天</div>
+          <div class="fc-temp"><span class="fc-lo">11°</span> / 23°C</div>
+        </div><div class="forecast-item">
+          <div class="fc-date">4/24周五</div>
+          <div class="fc-icon">☁️</div>
+          <div class="fc-desc">阴天</div>
+          <div class="fc-temp"><span class="fc-lo">11°</span> / 22°C</div>
+        </div><div class="forecast-item">
+          <div class="fc-date">4/25周六</div>
+          <div class="fc-icon">⛅</div>
+          <div class="fc-desc">多云</div>
+          <div class="fc-temp"><span class="fc-lo">16°</span> / 29°C</div>
+        </div><div class="forecast-item">
+          <div class="fc-date">4/26周日</div>
+          <div class="fc-icon">🌦️</div>
+          <div class="fc-desc">小毛毛雨</div>
+          <div class="fc-temp"><span class="fc-lo">20°</span> / 28°C</div>
+        </div><div class="forecast-item">
+          <div class="fc-date">4/27周一</div>
+          <div class="fc-icon">☁️</div>
+          <div class="fc-desc">阴天</div>
+          <div class="fc-temp"><span class="fc-lo">18°</span> / 28°C</div>
+        </div><div class="forecast-item">
+          <div class="fc-date">4/28周二</div>
+          <div class="fc-icon">☁️</div>
+          <div class="fc-desc">阴天</div>
+          <div class="fc-temp"><span class="fc-lo">17°</span> / 28°C</div>
+        </div><div class="forecast-item">
+          <div class="fc-date">4/29周三</div>
+          <div class="fc-icon">☀️</div>
+          <div class="fc-desc">晴</div>
+          <div class="fc-temp"><span class="fc-lo">16°</span> / 29°C</div>
+        </div><div class="forecast-item">
+          <div class="fc-date">4/30周四</div>
+          <div class="fc-icon">☁️</div>
+          <div class="fc-desc">阴天</div>
+          <div class="fc-temp"><span class="fc-lo">19°</span> / 30°C</div>
+        </div><div class="forecast-item">
+          <div class="fc-date">5/1周五</div>
+          <div class="fc-icon">🌦️</div>
+          <div class="fc-desc">小毛毛雨</div>
+          <div class="fc-temp"><span class="fc-lo">21°</span> / 32°C</div>
+        </div><div class="forecast-item">
+          <div class="fc-date">5/2周六</div>
+          <div class="fc-icon">🌦️</div>
+          <div class="fc-desc">小毛毛雨</div>
+          <div class="fc-temp"><span class="fc-lo">21°</span> / 31°C</div>
+        </div>
+    </div>
+  <div class="card tips-card">
+    <div class="card-title">🔔 明天出门提醒</div>
+    <div class="section-title"><span class="section-line"></span>👗 穿衣打扮</div>
+      <div class="tip-item">
+        <div class="tip-icon">👔</div>
+        <div class="tip-content">
+          <div class="tip-title">舒适穿搭</div>
+          <div class="tip-desc">明天 17~27°C，温度宜人，短袖或薄长袖都可以</div>
+        </div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">↕️</div>
+        <div class="tip-content">
+          <div class="tip-title">有一定温差</div>
+          <div class="tip-desc">温差 10°C，早晚比中午凉，备一件薄外套</div>
+        </div>
+      </div><div class="section-title"><span class="section-line"></span>🌤️ 天气应对</div>
+      <div class="tip-item">
+        <div class="tip-icon">☁️</div>
+        <div class="tip-content">
+          <div class="tip-title">阴天心情</div>
+          <div class="tip-desc">阴天容易情绪低落，听听音乐、和朋友聊聊天，保持好心情</div>
+        </div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">🕶️</div>
+        <div class="tip-content">
+          <div class="tip-title">防晒必要</div>
+          <div class="tip-desc">UV指数 7.8（强），涂防晒霜、戴太阳镜和遮阳帽</div>
+        </div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">💧</div>
+        <div class="tip-content">
+          <div class="tip-title">非常潮湿</div>
+          <div class="tip-desc">湿度 94%，体感闷热粘腻，衣物难干，开空调除湿</div>
+        </div>
+      </div><div class="section-title"><span class="section-line"></span>🏠 生活提醒</div>
+      <div class="tip-item">
+        <div class="tip-icon">🕐</div>
+        <div class="tip-content">
+          <div class="tip-title">晾晒较慢</div>
+          <div class="tip-desc">湿度高，衣物不易干，建议多晾一天或使用除湿机辅助</div>
+        </div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">☕</div>
+        <div class="tip-content">
+          <div class="tip-title">暖心饮食</div>
+          <div class="tip-desc">阴雨天来杯热饮，巧克力、奶茶都能提升幸福感</div>
+        </div>
+      </div><div class="section-title"><span class="section-line"></span>🚶 出行建议</div>
+      <div class="tip-item">
+        <div class="tip-icon">🌅</div>
+        <div class="tip-content">
+          <div class="tip-title">日出日落</div>
+          <div class="tip-desc">日出 05:54 · 日落 18:55，日照充足，户外时间充裕</div>
+        </div>
+      </div><div class="section-title"><span class="section-line"></span>💪 健康关怀</div>
+      <div class="tip-item">
+        <div class="tip-icon">😴</div>
+        <div class="tip-content">
+          <div class="tip-title">睡眠提醒</div>
+          <div class="tip-desc">阴雨天容易犯困，晚上别熬夜，保证7-8小时睡眠</div>
+        </div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">🧴</div>
+        <div class="tip-content">
+          <div class="tip-title">皮肤防护</div>
+          <div class="tip-desc">紫外线强，除了防晒霜，晒后回来用芦荟胶或补水面膜修复</div>
+        </div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">🦠</div>
+        <div class="tip-content">
+          <div class="tip-title">防霉除菌</div>
+          <div class="tip-desc">高温高湿容易滋生细菌霉菌，注意食物保鲜，衣物彻底晒干再收</div>
+        </div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">🌸</div>
+        <div class="tip-content">
+          <div class="tip-title">春季提醒</div>
+          <div class="tip-desc">春季花粉多，过敏体质外出戴口罩，回家清洗鼻腔</div>
+        </div>
+      </div><div class="section-title"><span class="section-line"></span>🎒 出门必带清单</div>
+      <div class="tip-item">
+        <div class="tip-icon">🎒</div>
+        <div class="tip-content">
+          <div class="tip-title">明天出门别忘了</div>
+          <div class="tip-desc">🧴 防晒霜  🕶️ 太阳镜  🤧 抗过敏药  🔑 钥匙  📱 手机</div>
+        </div>
+      </div>
+  </div></div>
 
   <div class="footer">🚀 火星人 · Open-Meteo · 仅供参考 · 欢迎回家</div>
 </div>
@@ -1305,82 +1653,83 @@ switchCity(0);
 })();
 </script>
 
-  <div class="music-player" id="musicPlayer">
-    <div class="mp-icon" id="mpIcon">🎵</div>
-    <div class="mp-info">
-      <div class="mp-title" id="mpTitle">好想爱这个世界啊</div>
-      <div class="mp-sub">华晨宇</div>
-    </div>
-    
+<!-- 音乐播放器 -->
+<!-- 音乐播放器 -->
+<div class="music-player" id="musicPlayer">
+  <div class="mp-icon" id="mpIcon">&#127925;</div>
+  <div class="mp-info">
+    <div class="mp-title" id="mpTitle">好想爱这个世界啊</div>
+    <div class="mp-sub">华晨宇</div>
+  </div>
+  <div class="mp-btns">
+    <button class="mp-btn prev" id="mpPrevBtn" title="上一曲">&#9198;</button>
+    <button class="mp-btn play" id="mpPlayBtn" title="播放/暂停">&#9654;</button>
+    <button class="mp-btn next" id="mpNextBtn" title="下一曲">&#9197;</button>
+    <button class="mp-btn mute" id="mpMuteBtn" title="静音">&#128263;</button>
+  </div>
+</div>
+<audio id="bgMusic" loop preload="auto"></audio>
+
+
+
+
+
 <script>
-    (function(){
-      var mp=document.getElementById('bgMusic');
-      var playBtn=document.getElementById('mpPlayBtn');
-      var muteBtn=document.getElementById('mpMuteBtn');
-      var mpIcon=document.getElementById('mpIcon');
-      var muted=false;
-      playBtn.onclick=function(e){
-        e.stopPropagation();
-        if(mp.paused){
-          mp.play().catch(function(){
-            alert('请先点击页面任意位置解除浏览器限制，再点击播放');
-          });
-          playBtn.textContent='⏸';
-          mpIcon.classList.add('playing');
-        }else{
-          mp.pause();
-          playBtn.textContent='▶';
-          mpIcon.classList.remove('playing');
-        }
-      };
-      muteBtn.onclick=function(e){
-        e.stopPropagation();
-        muted=!muted;
-        mp.muted=muted;
-        muteBtn.classList.toggle('on',muted);
-        muteBtn.textContent=muted?'🔇':'🔊';
-      };
-      document.getElementById('musicPlayer').addEventListener('click',function(){
-        if(mp.paused){
-          mp.play().catch(function(){
-            alert('请先点击页面任意位置解除浏览器限制，再点击播放');
-          });
-          playBtn.textContent='⏸';
-          mpIcon.classList.add('playing');
-        }else{
-          mp.pause();
-          playBtn.textContent='▶';
-          mpIcon.classList.remove('playing');
-        }
-      });
-    })();
-  </script>
-<div class="mp-btns">
-      <button class="mp-btn play" id="mpPlayBtn" title="播放/暂停">▶</button>
-      <button class="mp-btn mute" id="mpMuteBtn" title="静音">🔊</button>
-    </div>
-  </div>
-  <audio id="bgMusic" loop preload="none">
-    <source src="https://isure.stream.qqmusic.qq.com/M500001B7Up1vW3Dy.mp3?guid=ffffffff82def4e4&vkey=62D11F7A2F13C5E9F2A3C3F2E9B5A7D4C6E8F0A2B4D6C8E0A2B4D6C8E0A2B&uin=0&fromtag=999" type="audio/mpeg">
-  </audio>
-  
+(function(){
+  var playlist=[
+    "music/光年之外.mp3","music/向阳而生(日出版).mp3","music/向阳而生.mp3","music/大地(Live).mp3",
+    "music/好想我回来啊.mp3","music/好想爱这个世界啊.mp3","music/微光(Live).mp3",
+    "music/快乐出发(2025-2026湖南卫视跨年晚会现场).mp3","music/易燃易爆炸.mp3",
+    "music/火花Flame.mp3","music/烟火里的尘埃.m4a","music/疯人院(电音版).mp3",
+    "music/花落时相遇.mp3","music/降临+黑白艺术家.mp3","music/风之海.m4a",
+    "music/齐天大圣+国王与乞丐+向阳而生(2025-2026湖南卫视跨年晚会现场).mp3"
+  ];
+  var current=0, muted=false;
+  var mp=document.getElementById('bgMusic');
+  var playBtn=document.getElementById('mpPlayBtn');
+  var muteBtn=document.getElementById('mpMuteBtn');
+  var mpIcon=document.getElementById('mpIcon');
+  var mpTitle=document.getElementById('mpTitle');
+  if(!mp||!playBtn){console.warn('Music elements not found');return;}
 
+  function getTitle(n){return n.replace(/\.[^.]+$/,'').replace(/\+[^\]+$/,'').replace(/\//g,' + ');}
 
-  <div class="music-player" id="musicPlayer">
-    <div class="mp-icon" id="mpIcon">🎵</div>
-    <div class="mp-info">
-      <div class="mp-title">好想爱这个世界啊</div>
-      <div class="mp-sub">华晨宇</div>
-    </div>
-    <div class="mp-btns">
-      <button class="mp-btn play" id="mpPlayBtn">▶</button>
-      <button class="mp-btn mute" id="mpMuteBtn">🔊</button>
-    </div>
-  </div>
-  <audio id="bgMusic" loop preload="none">
-    <source src="https://isure.stream.qqmusic.qq.com/M500001B7Up1vW3Dy.mp3?guid=ffffffff82def4e4&vkey=62D11F7A2F13C5E9F2A3C3F2E9B5A7D4C6E8F0A2B4D6C8E0A2B4D6C8E0A2B&uin=0&fromtag=999" type="audio/mpeg">
-  </audio>
-  
+  function load(idx){
+    current=((idx%playlist.length)+playlist.length)%playlist.length;
+    mp.src=playlist[current];
+    if(mpTitle)mpTitle.textContent=getTitle(playlist[current]);
+  }
 
-</body>
-</html>
+  load(0);
+
+  function doPlay(e){
+    if(e&&e.stopPropagation)e.stopPropagation();
+    if(mp.paused){
+      mp.play().then(function(){
+        if(playBtn)playBtn.innerHTML='&#9208;';
+        if(mpIcon)mpIcon.classList.add('playing');
+      }).catch(function(err){console.error('Play error:',err);});
+    }else{
+      mp.pause();
+      if(playBtn)playBtn.innerHTML='&#9654;';
+      if(mpIcon)mpIcon.classList.remove('playing');
+    }
+  }
+
+  playBtn.addEventListener('click',function(e){e.stopPropagation();doPlay(e);});
+  playBtn.style.cursor='pointer';
+
+  var prevBtn=document.getElementById('mpPrevBtn');
+  var nextBtn=document.getElementById('mpNextBtn');
+  if(prevBtn){prevBtn.addEventListener('click',function(e){e.stopPropagation();load(current-1);mp.play().then(function(){if(playBtn)playBtn.innerHTML='&#9208;';if(mpIcon)mpIcon.classList.add('playing');}).catch(function(){});});}
+  if(nextBtn){nextBtn.addEventListener('click',function(e){e.stopPropagation();load(current+1);mp.play().then(function(){if(playBtn)playBtn.innerHTML='&#9208;';if(mpIcon)mpIcon.classList.add('playing');}).catch(function(){});});}
+  if(muteBtn){muteBtn.addEventListener('click',function(e){e.stopPropagation();muted=!muted;mp.muted=muted;muteBtn.classList.toggle('on',muted);muteBtn.innerHTML=muted?'&#128264;':'&#128263;';});}
+
+  mp.addEventListener('ended',function(){load(current+1);mp.play().then(function(){if(playBtn)playBtn.innerHTML='&#9208;';}).catch(function(){});});
+  mp.addEventListener('error',function(e){console.error('Audio error:',playlist[current],e);});
+
+  var player=document.getElementById('musicPlayer');
+  if(player){player.addEventListener('click',function(e){if(e.target.tagName!=='BUTTON')doPlay();});}
+})();
+</script>
+</body></html>
