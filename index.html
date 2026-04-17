@@ -1,7 +1,10 @@
 <html lang="zh-CN"><head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>火星人气预报</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0d0d0d">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+<title>冰冰专属天气预报</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -640,6 +643,40 @@
 .hourly-temp{font-weight:600;font-size:14px}
 .hourly-pop{color:#64b5f6;font-size:10px}
 
+
+/* 12小时降雨预警弹窗 */
+.rain-toast {
+  position: fixed;
+  top: max(env(safe-area-inset-top), 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: #fff;
+  padding: 12px 16px;
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(100,149,237,0.3);
+  font-size: 14px;
+  max-width: 90vw;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: toastSlideIn 0.4s ease;
+  border: 1px solid rgba(100,149,237,0.3);
+  backdrop-filter: blur(10px);
+}
+.rain-toast-icon { font-size: 20px; flex-shrink: 0; }
+.rain-toast-text { flex: 1; line-height: 1.4; }
+.rain-toast-close {
+  background: none; border: none; color: rgba(255,255,255,0.6);
+  font-size: 20px; cursor: pointer; padding: 0 4px; line-height: 1;
+  flex-shrink: 0;
+}
+.rain-toast-close:hover { color: #fff; }
+@keyframes toastSlideIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
 </style>
 </head>
 <body>
@@ -669,7 +706,7 @@
 
 <div class="container">
   <div class="header">
-    <h1>🌸 火星人天气预报</h1>
+    <h1>🌸 冰冰专属天气预报</h1>
     <div class="subtitle">欢迎回家 · 出门前先看看这些</div>
     <div class="mars-logo">MARS CONCERT</div>
   </div>
@@ -1530,6 +1567,18 @@ async function fetchWeather(lat,lon,cityName){
     }
 
     const hourlyData=parseHourlyData(d);
+
+    // 12小时降雨预警弹窗
+    const upcomingRain = hourlyData.filter(h => h.pop !== null && h.pop >= 30).slice(0, 6);
+    if (upcomingRain.length > 0) {
+      const rainHours = upcomingRain.map(h => h.time).join('、');
+      const rainMsg = '接下来 ' + upcomingRain[0].time + ' 起有雨 (降水概率' + upcomingRain[0].pop + '%)，记得带伞~';
+      const toast = document.createElement('div');
+      toast.className = 'rain-toast';
+      toast.innerHTML = '<span class="rain-toast-icon">&#128167;</span><span class="rain-toast-text">' + rainMsg + '</span><button class="rain-toast-close" onclick="this.parentElement.remove()">×</button>';
+      document.body.appendChild(toast);
+      setTimeout(function(){ if(toast.parentElement)toast.remove(); }, 15000);
+    }
 
     renderAll(todayData,tomorrowData,forecastData,cityName,hourlyData);
   }catch(e){
