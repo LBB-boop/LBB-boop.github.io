@@ -4,7 +4,7 @@
   <meta name="theme-color" content="#0d0d0d">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-capable" content="yes">
-<title>冰冰专属天气预报</title>
+<title>火星人天气预报</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -613,9 +613,9 @@
   @keyframes f4{0%,100%{transform:translateY(0) scale(1);opacity:.65}50%{transform:translateY(-14px) scale(1.12);opacity:.88}}
 
   /* ── 音乐播放器 ── */
-  .music-player{position:fixed;bottom:18px;right:18px;z-index:999;display:flex;align-items:center;gap:8px;background:rgba(15,5,10,.88);backdrop-filter:blur(16px);border:1px solid rgba(255,80,80,.35);border-radius:28px;padding:8px 12px 8px 10px;box-shadow:0 4px 20px rgba(0,0,0,.4);transition:all .3s;max-width:260px;cursor:pointer}
+  .music-player{position:fixed;bottom:24px;right:16px;z-index:999;display:flex;align-items:center;gap:8px;background:rgba(15,5,10,.9);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,80,80,.4);border-radius:28px;padding:10px 14px 10px 12px;box-shadow:0 6px 24px rgba(0,0,0,.5);transition:all .3s;max-width:280px;cursor:pointer;touch-action:manipulation}
   .music-player:hover{border-color:rgba(255,80,80,.65);transform:scale(1.02)}
-  .mp-icon{font-size:17px;animation:mpP 2s ease-in-out infinite;flex-shrink:0}
+  .mp-icon{font-size:18px;animation:mpP 2s ease-in-out infinite;flex-shrink:0;transition:transform .3s}
   .mp-icon.playing{animation:mpP .9s ease-in-out infinite}
   @keyframes mpP{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
   .mp-info{flex:1;min-width:0}
@@ -642,7 +642,6 @@
 .hourly-icon{font-size:22px;line-height:1}
 .hourly-temp{font-weight:600;font-size:14px}
 .hourly-pop{color:#64b5f6;font-size:10px}
-
 
 /* 12小时降雨预警弹窗 */
 .rain-toast {
@@ -694,7 +693,59 @@ body { padding-top: env(safe-area-inset-top); }
 @media (display-mode: standalone) {
   .ios-statusbar-fake { display: block; }
 }
+
+/* ================================================
+   iOS 主屏书签 / PWA 模式全面适配
+   ================================================ */
+/* standalone模式：iOS主屏图标打开 */
+@media (display-mode: standalone) {
+  html, body {
+    /* iOS 11+ safe area - 确保内容不被刘海遮挡 */
+    padding-top: env(safe-area-inset-top, 47px);
+    padding-bottom: env(safe-area-inset-bottom, 34px);
+    -webkit-env: "";
+  }
+}
+
+/* iPhone X / 全面屏适配 */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .app-header {
+    padding-top: calc(12px + env(safe-area-inset-top));
+  }
+}
+
+/* ================================================
+   统一状态栏区域处理
+   ================================================ */
+/* 顶部填充 - 适配刘海屏 */
+.app-header {
+  position: relative;
+  padding-top: 12px;
+}
+
+/* iOS standalone: 顶部状态栏区域深色渐变覆盖 */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: env(safe-area-inset-top, 47px);
+  background: linear-gradient(
+    to bottom,
+    rgba(13,13,13,0.98) 0%,
+    rgba(13,13,13,0.7) 60%,
+    transparent 100%
+  );
+  z-index: 9997;
+  pointer-events: none;
+  display: block;
+}
 </style>
+  <!-- iOS主屏图标 -->
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' fill='%230d0d0d' rx='40'/><text x='50%25' y='55%25' font-size='100' text-anchor='middle' dominant-baseline='middle'>🔥</text></svg>">
+  <link rel="apple-touch-icon-precomposed" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' fill='%230d0d0d' rx='40'/><text x='50%25' y='55%25' font-size='100' text-anchor='middle' dominant-baseline='middle'>🔥</text></svg>">
+  <!-- iOS启动图（添加到主屏时显示） -->
+  <meta name="apple-mobile-web-app-title" content="火星人天气">
+  <link rel="apple-touch-startup-image" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 480'><rect width='320' height='480' fill='%230d0d0d'/><text x='50%25' y='45%25' font-size='60' text-anchor='middle' dominant-baseline='middle'>🔥</text><text x='50%25' y='60%25' font-size='18' text-anchor='middle' fill='%23ff6b35'>火星人天气预报</text></svg>">
 </head>
 <body>
 <div class="ios-statusbar-fake" aria-hidden="true"></div>
@@ -724,7 +775,7 @@ body { padding-top: env(safe-area-inset-top); }
 
 <div class="container">
   <div class="header">
-    <h1>🌸 冰冰专属天气预报</h1>
+    <h1>🔥 火星人天气预报</h1>
     <div class="subtitle">欢迎回家 · 出门前先看看这些</div>
     <div class="mars-logo">MARS CONCERT</div>
   </div>
@@ -1600,7 +1651,6 @@ async function fetchWeather(lat,lon,cityName){
 
     renderAll(todayData,tomorrowData,forecastData,cityName,hourlyData);
   }catch(e){
-    console.error(e);
     renderError('获取天气数据失败，请检查网络后重试');
   }
 }
@@ -1720,8 +1770,6 @@ switchCity(0);
 })();
 </script>
 
-<!-- 音乐播放器 -->
-<!-- 音乐播放器 -->
 <div class="music-player" id="musicPlayer">
   <div class="mp-icon" id="mpIcon">&#127925;</div>
   <div class="mp-info">
@@ -1730,66 +1778,167 @@ switchCity(0);
   </div>
   <div class="mp-btns">
     <button class="mp-btn prev" id="mpPrevBtn" title="上一曲">&#9198;</button>
-    <button class="mp-btn play" id="mpPlayBtn" title="播放/暂停">&#9654;</button>
+    <button class="mp-btn play" id="mpPlayBtn" title="播放">&#9654;</button>
     <button class="mp-btn next" id="mpNextBtn" title="下一曲">&#9197;</button>
     <button class="mp-btn mute" id="mpMuteBtn" title="静音">&#128263;</button>
   </div>
 </div>
-<audio id="bgMusic" loop preload="auto"></audio>
-
-
-
-
-
+<audio id="bgMusic" preload="auto"></audio>
 <script>
+// 火星人天气 - 音乐播放器
 (function(){
-  var playlist=["music/好想爱这个世界啊.mp3","music/向阳而生(日出版).mp3","music/火花Flame.mp3"];
-  var current=0, muted=false;
-  var mp=document.getElementById('bgMusic');
-  var playBtn=document.getElementById('mpPlayBtn');
-  var muteBtn=document.getElementById('mpMuteBtn');
-  var mpIcon=document.getElementById('mpIcon');
-  var mpTitle=document.getElementById('mpTitle');
-  if(!mp||!playBtn){console.warn('Music elements not found');return;}
+  // 播放列表（服务器上有的3首歌）
+  var playlist = [
+    "music/好想爱这个世界啊.mp3",
+    "music/向阳而生(日出版).mp3",
+    "music/火花Flame.mp3"
+  ];
+  var current = 0;
+  var isPlaying = false;
 
-  function getTitle(n){return n.replace(/\.[^.]+$/,'').replace(/\+[^\]+$/,'').replace(/\//g,' + ');}
+  var mp = document.getElementById('bgMusic');
+  var playBtn = document.getElementById('mpPlayBtn');
+  var muteBtn = document.getElementById('mpMuteBtn');
+  var mpIcon = document.getElementById('mpIcon');
+  var mpTitle = document.getElementById('mpTitle');
+  var prevBtn = document.getElementById('mpPrevBtn');
+  var nextBtn = document.getElementById('mpNextBtn');
 
-  function load(idx){
-    current=((idx%playlist.length)+playlist.length)%playlist.length;
-    mp.src=playlist[current];
-    if(mpTitle)mpTitle.textContent=getTitle(playlist[current]);
+  // 歌曲名处理
+  function getTitle(n) {
+    return n
+      .replace(/\.mp3$/, '')
+      .replace(/\+[^\+]+$/, '')
+      .replace(/\//g, ' + ')
+      .replace(/\(/g, '（')
+      .replace(/\)/g, '）');
   }
 
-  load(0);
+  // 加载指定歌曲
+  function loadTrack(idx) {
+    current = ((idx % playlist.length) + playlist.length) % playlist.length;
+    // iOS Safari: 设置 src 后需要 load()
+    mp.src = playlist[current];
+    mp.load();
+    if (mpTitle) mpTitle.textContent = getTitle(playlist[current]);
+  }
 
-  function doPlay(e){
-    if(e&&e.stopPropagation)e.stopPropagation();
-    if(mp.paused){
-      mp.play().then(function(){
-        if(playBtn)playBtn.innerHTML='&#9208;';
-        if(mpIcon)mpIcon.classList.add('playing');
-      }).catch(function(err){console.error('Play error:',err);});
-    }else{
+  // 播放/暂停核心逻辑
+  function doPlay() {
+    if (isPlaying) {
       mp.pause();
-      if(playBtn)playBtn.innerHTML='&#9654;';
-      if(mpIcon)mpIcon.classList.remove('playing');
+      isPlaying = false;
+      if (playBtn) playBtn.innerHTML = '&#9654;';  // 播放符号
+      if (mpIcon) mpIcon.classList.remove('playing');
+    } else {
+      // iOS Safari: 必须是用户手势内直接调用 play()
+      var p = mp.play();
+      if (p !== undefined) {
+        p.then(function() {
+          isPlaying = true;
+          if (playBtn) playBtn.innerHTML = '&#9208;';  // 暂停符号
+          if (mpIcon) mpIcon.classList.add('playing');
+        }).catch(function(err) {
+          console.warn('play() failed:', err);
+          // 如果播放失败（iOS权限等），显示提示
+          if (mpTitle) mpTitle.textContent = '点击Safari图标试试';
+        });
+      }
     }
   }
 
-  playBtn.addEventListener('click',function(e){e.stopPropagation();doPlay(e);});
-  playBtn.style.cursor='pointer';
+  // 上一曲
+  function doPrev(e) {
+    if (e && e.stopPropagation) e.stopPropagation();
+    loadTrack(current - 1);
+    if (isPlaying) {
+      var p = mp.play();
+      if (p !== undefined) {
+        p.then(function() {
+          if (playBtn) playBtn.innerHTML = '&#9208;';
+          if (mpIcon) mpIcon.classList.add('playing');
+        }).catch(function(){});
+      }
+    }
+  }
 
-  var prevBtn=document.getElementById('mpPrevBtn');
-  var nextBtn=document.getElementById('mpNextBtn');
-  if(prevBtn){prevBtn.addEventListener('click',function(e){e.stopPropagation();load(current-1);mp.play().then(function(){if(playBtn)playBtn.innerHTML='&#9208;';if(mpIcon)mpIcon.classList.add('playing');}).catch(function(){});});}
-  if(nextBtn){nextBtn.addEventListener('click',function(e){e.stopPropagation();load(current+1);mp.play().then(function(){if(playBtn)playBtn.innerHTML='&#9208;';if(mpIcon)mpIcon.classList.add('playing');}).catch(function(){});});}
-  if(muteBtn){muteBtn.addEventListener('click',function(e){e.stopPropagation();muted=!muted;mp.muted=muted;muteBtn.classList.toggle('on',muted);muteBtn.innerHTML=muted?'&#128264;':'&#128263;';});}
+  // 下一曲
+  function doNext(e) {
+    if (e && e.stopPropagation) e.stopPropagation();
+    loadTrack(current + 1);
+    if (isPlaying) {
+      var p = mp.play();
+      if (p !== undefined) {
+        p.then(function() {
+          if (playBtn) playBtn.innerHTML = '&#9208;';
+          if (mpIcon) mpIcon.classList.add('playing');
+        }).catch(function(){});
+      }
+    }
+  }
 
-  mp.addEventListener('ended',function(){load(current+1);mp.play().then(function(){if(playBtn)playBtn.innerHTML='&#9208;';}).catch(function(){});});
-  mp.addEventListener('error',function(e){console.error('Audio error:',playlist[current],e);});
+  // 静音切换
+  function doMute(e) {
+    if (e && e.stopPropagation) e.stopPropagation();
+    mp.muted = !mp.muted;
+    if (muteBtn) {
+      muteBtn.classList.toggle('on', mp.muted);
+      muteBtn.innerHTML = mp.muted ? '&#128264;' : '&#128263;';
+    }
+  }
 
-  var player=document.getElementById('musicPlayer');
-  if(player){player.addEventListener('click',function(e){if(e.target.tagName!=='BUTTON')doPlay();});}
+  // 绑定所有按钮事件
+  playBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    doPlay();
+  });
+
+  prevBtn.addEventListener('click', doPrev);
+  nextBtn.addEventListener('click', doNext);
+  muteBtn.addEventListener('click', doMute);
+
+  // 点击播放器整体也可以播放/暂停（按钮以外区域）
+  var player = document.getElementById('musicPlayer');
+  if (player) {
+    player.addEventListener('click', function(e) {
+      var tag = e.target.tagName;
+      // 按钮自己已经绑了事件，这里只处理按钮之外的点击
+      if (tag !== 'BUTTON') {
+        doPlay();
+      }
+    });
+  }
+
+  // 播放结束自动下一首
+  mp.addEventListener('ended', function() {
+    loadTrack(current + 1);
+    var p = mp.play();
+    if (p !== undefined) {
+      p.then(function() {
+        if (playBtn) playBtn.innerHTML = '&#9208;';
+        if (mpIcon) mpIcon.classList.add('playing');
+        isPlaying = true;
+      }).catch(function(){});
+    }
+  });
+
+  // 音频错误处理
+  mp.addEventListener('error', function(e) {
+    });
+
+  // 初始加载第一首歌
+  loadTrack(0);
+
+  // iOS Safari: 用户第一次触摸页面时预加载音频权限
+  // 这不自动播放，只是提前获取音频上下文
+  var iosReady = false;
+  document.addEventListener('touchstart', function once() {
+    if (!iosReady) {
+      iosReady = true;
+      mp.load();
+      document.removeEventListener('touchstart', once);
+    }
+  }, { once: true });
 })();
 </script>
 </body></html>
