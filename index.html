@@ -653,8 +653,8 @@
 .rain-toast {
   position: fixed;
   top: max(env(safe-area-inset-top), 10px);
-  left: 50%;
-  transform: translateX(-50%);
+  right: 16px;
+  left: auto;
   z-index: 9999;
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   color: #fff;
@@ -662,7 +662,7 @@
   border-radius: 14px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(100,149,237,0.3);
   font-size: 14px;
-  max-width: 90vw;
+  max-width: 85vw;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -670,7 +670,46 @@
   border: 1px solid rgba(100,149,237,0.3);
   backdrop-filter: blur(10px);
 }
-.rain-toast-icon { font-size: 20px; flex-shrink: 0; }
+/* 黑煤球雨滴图标 */
+.rain-toast-icon {
+  flex-shrink: 0;
+  position: relative;
+  width: 32px;
+  height: 36px;
+}
+.rain-toast-icon .coal-body {
+  width: 28px;
+  height: 28px;
+  margin: 8px auto 0;
+  background: radial-gradient(circle at 40% 35%, #444, #1a1a1a 60%, #0d0d0d);
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5), inset 0 -2px 4px rgba(0,0,0,0.4), inset 0 2px 4px rgba(100,100,100,0.15);
+}
+.rain-toast-icon .coal-body::before {
+  content: '';
+  position: absolute;
+  top: 7px; left: 6px;
+  width: 5px; height: 6px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 11px 0 0 0 #fff;
+}
+.rain-toast-icon .coal-body::after {
+  content: '';
+  position: absolute;
+  top: 9px; left: 7px;
+  width: 3px; height: 3px;
+  background: #111;
+  border-radius: 50%;
+  box-shadow: 11px 0 0 0 #111;
+}
+.rain-toast-icon .coal-flower {
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+}
 .rain-toast-text { flex: 1; line-height: 1.4; }
 .rain-toast-close {
   background: none; border: none; color: rgba(255,255,255,0.6);
@@ -679,8 +718,8 @@
 }
 .rain-toast-close:hover { color: #fff; }
 @keyframes toastSlideIn {
-  from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
-  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 
 /* iOS书签模式状态栏适配 - 顶部黑色条延伸状态栏 */
@@ -1650,7 +1689,7 @@ async function fetchWeather(lat,lon,cityName){
       const rainMsg = '接下来 ' + upcomingRain[0].time + ' 起有雨 (降水概率' + upcomingRain[0].pop + '%)，记得带伞~';
       const toast = document.createElement('div');
       toast.className = 'rain-toast';
-      toast.innerHTML = '<span class="rain-toast-icon">&#128167;</span><span class="rain-toast-text">' + rainMsg + '</span><button class="rain-toast-close" onclick="this.parentElement.remove()">×</button>';
+      toast.innerHTML = '<span class="rain-toast-icon"><div class="coal-body"></div><div class="coal-flower">🌸</div></span><span class="rain-toast-text">' + rainMsg + '</span><button class="rain-toast-close" onclick="this.parentElement.remove()">×</button>';
       document.body.appendChild(toast);
       setTimeout(function(){ if(toast.parentElement)toast.remove(); }, 15000);
     }
