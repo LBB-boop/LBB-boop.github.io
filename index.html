@@ -823,11 +823,11 @@ body::before {
     <button class="search-btn" onclick="addCity()">添加</button>
   </div>
   <div class="city-tags" id="cityTags"><div class="city-tag active" onclick="switchCity(0)">
-      <span>应城</span></div></div>
+      <span>武汉</span></div></div>
 
   <div id="content">
   <div class="card index-card">
-    <div class="card-title">📊 出门指数 · 应城</div>
+    <div class="card-title">📊 出门指数 · 武汉</div>
     <div class="index-row">
       <div class="index-col">
         <div class="col-label">今天</div>
@@ -1669,7 +1669,7 @@ function loadCities(){
   try { cityList = JSON.parse(localStorage.getItem('weatherCities')||'[]'); } catch(e){ cityList=[]; }
   // 默认城市
   if(!cityList.length){
-    cityList=[{name:'应城',lat:30.93,lon:113.57}];
+    cityList=[{name:'武汉',lat:30.59,lon:114.30}];
     saveCities();
   }
 }
@@ -1982,6 +1982,8 @@ switchCity(0);
     player.addEventListener('touchstart', resetHideTimer, {passive: true});
     player.addEventListener('mouseenter', resetHideTimer);
   }
+  // 全局触摸事件：手机端用户在页面任意位置触摸都重置计时
+  document.addEventListener('touchstart', resetHideTimer, {passive: true});
   // 首次8秒后隐藏
   resetHideTimer();
 
