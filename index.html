@@ -652,74 +652,266 @@
 /* 12小时降雨预警弹窗 */
 .rain-toast {
   position: fixed;
-  top: max(env(safe-area-inset-top), 10px);
-  right: 16px;
-  left: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 9999;
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   color: #fff;
-  padding: 12px 16px;
-  border-radius: 14px;
+  padding: 16px 20px;
+  border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(100,149,237,0.3);
-  font-size: 14px;
-  max-width: 85vw;
+  font-size: 16px;
+  max-width: 88vw;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   animation: toastSlideIn 0.4s ease;
   border: 1px solid rgba(100,149,237,0.3);
   backdrop-filter: blur(10px);
+  text-align: center;
 }
-/* 黑煤球雨滴图标 */
+/* 黑煤球图标容器 */
 .rain-toast-icon {
   flex-shrink: 0;
   position: relative;
-  width: 32px;
-  height: 36px;
+  width: 56px;
+  height: 64px;
+  animation: coalBounce 1.2s ease-in-out infinite;
 }
+/* 黑煤球基础身体 */
 .rain-toast-icon .coal-body {
-  width: 28px;
-  height: 28px;
-  margin: 8px auto 0;
+  width: 48px;
+  height: 48px;
+  margin: 16px auto 0;
   background: radial-gradient(circle at 40% 35%, #444, #1a1a1a 60%, #0d0d0d);
   border-radius: 50%;
   position: relative;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.5), inset 0 -2px 4px rgba(0,0,0,0.4), inset 0 2px 4px rgba(100,100,100,0.15);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5), inset 0 -3px 6px rgba(0,0,0,0.4), inset 0 3px 6px rgba(100,100,100,0.15);
 }
-.rain-toast-icon .coal-body::before {
-  content: '';
+/* 黑煤球腮红 */
+.rain-toast-icon .coal-blush {
   position: absolute;
-  top: 7px; left: 6px;
-  width: 5px; height: 6px;
-  background: #fff;
+  width: 8px; height: 5px;
+  background: rgba(255,100,100,0.4);
   border-radius: 50%;
-  box-shadow: 11px 0 0 0 #fff;
+  top: 28px;
 }
-.rain-toast-icon .coal-body::after {
-  content: '';
-  position: absolute;
-  top: 9px; left: 7px;
-  width: 3px; height: 3px;
-  background: #111;
-  border-radius: 50%;
-  box-shadow: 11px 0 0 0 #111;
-}
+.rain-toast-icon .coal-blush-l { left: 4px; }
+.rain-toast-icon .coal-blush-r { right: 4px; }
+/* 小红花 */
 .rain-toast-icon .coal-flower {
   position: absolute;
   top: 0; left: 50%;
   transform: translateX(-50%);
-  font-size: 12px;
+  font-size: 16px;
+  z-index: 2;
 }
-.rain-toast-text { flex: 1; line-height: 1.4; }
+/* ── 多种黑煤球表情 ── */
+/* 1. 普通版 - 正常眨眼 */
+.rain-toast-icon.style-normal .coal-body::before {
+  content: '';
+  position: absolute;
+  top: 12px; left: 10px;
+  width: 8px; height: 10px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 18px 0 0 0 #fff;
+}
+.rain-toast-icon.style-normal .coal-body::after {
+  content: '';
+  position: absolute;
+  top: 15px; left: 12px;
+  width: 4px; height: 4px;
+  background: #111;
+  border-radius: 50%;
+  box-shadow: 18px 0 0 0 #111;
+}
+/* 2. 开心版 - 笑眼(^_^) */
+.rain-toast-icon.style-happy .coal-body::before {
+  content: '';
+  position: absolute;
+  top: 12px; left: 10px;
+  width: 8px; height: 4px;
+  border-bottom: 3px solid #fff;
+  border-radius: 0 0 50% 50%;
+  box-shadow: 18px 0 0 0 #fff;
+}
+.rain-toast-icon.style-happy .coal-body::after {
+  content: '';
+  position: absolute;
+  top: 16px; left: 12px;
+  width: 4px; height: 4px;
+  background: #111;
+  border-radius: 50%;
+  box-shadow: 18px 0 0 0 #111;
+}
+/* 3. 悲伤版 - 哭眼(T_T) */
+.rain-toast-icon.style-sad .coal-body::before {
+  content: '';
+  position: absolute;
+  top: 12px; left: 10px;
+  width: 8px; height: 10px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 18px 0 0 0 #fff;
+}
+.rain-toast-icon.style-sad .coal-body::after {
+  content: '';
+  position: absolute;
+  top: 15px; left: 11px;
+  width: 4px; height: 6px;
+  background: #64b5f6;
+  border-radius: 50% 50% 50% 50%;
+  box-shadow: 18px 0 0 0 #64b5f6, -1px -3px 0 2px #64b5f6, 17px -3px 0 2px #64b5f6;
+}
+.rain-toast-icon.style-sad .coal-blush { background: rgba(100,150,200,0.5); }
+/* 4. 戴墨镜版 - 耍酷 */
+.rain-toast-icon.style-cool .coal-body::before {
+  content: '';
+  position: absolute;
+  top: 11px; left: 6px;
+  width: 16px; height: 10px;
+  background: linear-gradient(135deg, #222 0%, #444 50%, #222 100%);
+  border-radius: 3px;
+  box-shadow: 18px 0 0 0 #fff;
+}
+.rain-toast-icon.style-cool .coal-body::after {
+  content: '';
+  position: absolute;
+  top: 15px; left: 12px;
+  width: 4px; height: 4px;
+  background: #111;
+  border-radius: 50%;
+  box-shadow: 18px 0 0 0 #111;
+}
+/* 5. 戴帽子版 - 潮流 */
+.rain-toast-icon.style-hat .coal-body::before {
+  content: '';
+  position: absolute;
+  top: 12px; left: 10px;
+  width: 8px; height: 10px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 18px 0 0 0 #fff;
+}
+.rain-toast-icon.style-hat .coal-body::after {
+  content: '';
+  position: absolute;
+  top: 15px; left: 12px;
+  width: 4px; height: 4px;
+  background: #111;
+  border-radius: 50%;
+  box-shadow: 18px 0 0 0 #111;
+}
+.rain-toast-icon.style-hat .coal-hat {
+  position: absolute;
+  top: -4px; left: 50%;
+  transform: translateX(-50%);
+  width: 36px; height: 14px;
+  background: linear-gradient(135deg, #ff4444 0%, #ff8a80 100%);
+  border-radius: 8px 8px 0 0;
+  z-index: 3;
+}
+.rain-toast-icon.style-hat .coal-hat::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: -4px;
+  width: 44px; height: 4px;
+  background: linear-gradient(135deg, #ff4444 0%, #ff8a80 100%);
+  border-radius: 2px;
+}
+/* 6. 脸红版 - 害羞 */
+.rain-toast-icon.style-shy .coal-body::before {
+  content: '';
+  position: absolute;
+  top: 12px; left: 10px;
+  width: 8px; height: 10px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 18px 0 0 0 #fff;
+}
+.rain-toast-icon.style-shy .coal-body::after {
+  content: '';
+  position: absolute;
+  top: 15px; left: 12px;
+  width: 4px; height: 4px;
+  background: #111;
+  border-radius: 50%;
+  box-shadow: 18px 0 0 0 #111;
+}
+.rain-toast-icon.style-shy .coal-blush {
+  width: 12px; height: 8px;
+  background: rgba(255,80,80,0.6);
+}
+.rain-toast-icon.style-shy .coal-blush-l { left: 2px; }
+.rain-toast-icon.style-shy .coal-blush-r { right: 2px; }
+/* 7. 呆萌版 - 惊讶 */
+.rain-toast-icon.style-surprised .coal-body {
+  width: 52px;
+  height: 52px;
+}
+.rain-toast-icon.style-surprised .coal-body::before {
+  content: '';
+  position: absolute;
+  top: 14px; left: 12px;
+  width: 10px; height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 18px 0 0 0 #fff;
+}
+.rain-toast-icon.style-surprised .coal-body::after {
+  content: '';
+  position: absolute;
+  top: 18px; left: 14px;
+  width: 6px; height: 6px;
+  background: #111;
+  border-radius: 50%;
+  box-shadow: 18px 0 0 0 #111;
+}
+/* 8. 无表情版 - 冷漠 */
+.rain-toast-icon.style-neutral .coal-body::before {
+  content: '';
+  position: absolute;
+  top: 14px; left: 10px;
+  width: 8px; height: 8px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 18px 0 0 0 #fff;
+}
+.rain-toast-icon.style-neutral .coal-body::after {
+  content: '';
+  position: absolute;
+  top: 14px; left: 12px;
+  width: 4px; height: 4px;
+  background: #111;
+  border-radius: 50%;
+  box-shadow: 18px 0 0 0 #111;
+}
+.rain-toast-text { flex: 1; line-height: 1.5; }
 .rain-toast-close {
-  background: none; border: none; color: rgba(255,255,255,0.6);
-  font-size: 20px; cursor: pointer; padding: 0 4px; line-height: 1;
-  flex-shrink: 0;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.7);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 6px 16px;
+  border-radius: 20px;
+  line-height: 1;
+  transition: all 0.2s;
 }
-.rain-toast-close:hover { color: #fff; }
+.rain-toast-close:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.2);
+}
 @keyframes toastSlideIn {
-  from { opacity: 0; transform: translateX(20px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+@keyframes coalBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
 }
 
 /* iOS书签模式状态栏适配 - 顶部黑色条延伸状态栏 */
@@ -1685,11 +1877,23 @@ async function fetchWeather(lat,lon,cityName){
     // 12小时降雨预警弹窗
     const upcomingRain = hourlyData.filter(h => h.pop !== null && h.pop >= 30).slice(0, 6);
     if (upcomingRain.length > 0) {
-      const rainHours = upcomingRain.map(h => h.time).join('、');
       const rainMsg = '接下来 ' + upcomingRain[0].time + ' 起有雨 (降水概率' + upcomingRain[0].pop + '%)，记得带伞~';
+      // 随机选择黑煤球样式
+      const coalStyles = ['normal', 'happy', 'sad', 'cool', 'hat', 'shy', 'surprised', 'neutral'];
+      const randomStyle = coalStyles[Math.floor(Math.random() * coalStyles.length)];
       const toast = document.createElement('div');
       toast.className = 'rain-toast';
-      toast.innerHTML = '<span class="rain-toast-icon"><div class="coal-body"></div><div class="coal-flower">🌸</div></span><span class="rain-toast-text">' + rainMsg + '</span><button class="rain-toast-close" onclick="this.parentElement.remove()">×</button>';
+      let coalHtml = '<span class="rain-toast-icon style-' + randomStyle + '">';
+      // 根据样式添加不同元素
+      if (randomStyle === 'hat') {
+        coalHtml += '<div class="coal-hat"></div>';
+      }
+      coalHtml += '<div class="coal-body"></div><div class="coal-blush coal-blush-l"></div><div class="coal-blush coal-blush-r"></div>';
+      if (randomStyle !== 'hat') {
+        coalHtml += '<div class="coal-flower">🌸</div>';
+      }
+      coalHtml += '</span>';
+      toast.innerHTML = coalHtml + '<span class="rain-toast-text">' + rainMsg + '</span><button class="rain-toast-close" onclick="this.parentElement.remove()">知道了</button>';
       document.body.appendChild(toast);
       setTimeout(function(){ if(toast.parentElement)toast.remove(); }, 15000);
     }
