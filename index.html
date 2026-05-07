@@ -2209,7 +2209,7 @@ switchCity(0);
   // 初始加载第一首歌
   loadTrack(0);
 
-  // ── 8秒无操作自动靠边隐藏 ──
+  // ── 2秒无操作自动隐藏，点击显示 ──
   var hideTimer = null;
   var player = document.getElementById('Player');
   function resetHideTimer() {
@@ -2217,17 +2217,15 @@ switchCity(0);
     clearTimeout(hideTimer);
     hideTimer = setTimeout(function() {
       if (player) player.classList.add('collapsed');
-    }, 8000);
+    }, 2000);
   }
-  // 用户任意交互都重置计时
+  // 点击播放器显示
   if (player) {
     player.addEventListener('click', resetHideTimer);
     player.addEventListener('touchstart', resetHideTimer, {passive: true});
     player.addEventListener('mouseenter', resetHideTimer);
   }
-  // 全局触摸事件：手机端用户在页面任意位置触摸都重置计时
-  document.addEventListener('touchstart', resetHideTimer, {passive: true});
-  // 首次8秒后隐藏
+  // 首次2秒后隐藏
   resetHideTimer();
 
   // iOS Safari: 用户第一次触摸页面时预加载音频权限
