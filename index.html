@@ -613,12 +613,12 @@
   @keyframes f4{0%,100%{transform:translateY(0) scale(1);opacity:.65}50%{transform:translateY(-14px) scale(1.12);opacity:.88}}
 
   /* ── 音乐播放器 ── */
-  .player{position:fixed;bottom:24px;right:0;z-index:9999;display:flex;align-items:center;background:rgba(15,5,10,.9);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:28px 0 0 28px;border:1px solid rgba(255,80,80,.4);border-right:none;padding:12px;box-shadow:0 6px 24px rgba(0,0,0,.5);transition:transform .45s cubic-bezier(.4,0,.2,1),opacity .45s;cursor:pointer;touch-action:manipulation;transform:translateX(calc(100% - 52px));opacity:.9}
-  .player:hover{transform:translateX(0);opacity:1;border-color:rgba(255,80,80,.65)}
-  .player.expanded{border-radius:28px;border-right:1px solid rgba(255,80,80,.4);right:16px;padding:10px 14px 10px 12px;transform:translateX(0);opacity:1;border-color:rgba(255,80,80,.65);max-width:280px;box-shadow:0 6px 24px rgba(0,0,0,.5)}
-  .player .mp-info,.player .mp-btns{opacity:0;pointer-events:none;width:0;overflow:hidden;transition:all .35s}
-  .player.expanded .mp-info,.player.expanded .mp-btns{opacity:1;pointer-events:auto;width:auto;overflow:visible}
-  .player .mp-icon{font-size:22px;animation:mpP 2s ease-in-out infinite;flex-shrink:0}
+  .player{position:fixed;bottom:24px;right:16px;z-index:999;display:flex;align-items:center;gap:8px;background:rgba(15,5,10,.9);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,80,80,.4);border-radius:28px;padding:10px 14px 10px 12px;box-shadow:0 6px 24px rgba(0,0,0,.5);transition:transform .45s cubic-bezier(.4,0,.2,1),opacity .45s;max-width:280px;cursor:pointer;touch-action:manipulation;transform:translateX(calc(100% - 44px));opacity:.85}
+  .player:hover{transform:translateX(0);opacity:1;border-color:rgba(255,80,80,.65);box-shadow:0 6px 24px rgba(0,0,0,.5)}
+  .player.expanded{padding:10px 14px 10px 12px;transform:translateX(0);opacity:1;border-color:rgba(255,80,80,.65);max-width:280px;box-shadow:0 6px 24px rgba(0,0,0,.5)}
+  .player .mp-info,.player .mp-btns{opacity:0;pointer-events:none}
+  .player.expanded .mp-info,.player.expanded .mp-btns{opacity:1;pointer-events:auto}
+  .player .mp-icon{font-size:18px;animation:mpP 2s ease-in-out infinite;flex-shrink:0}
   .player.expanded .mp-icon{animation:mpP .9s ease-in-out infinite;margin-right:4px}
   @keyframes mpP{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
   .mp-info{flex:1;min-width:0;overflow:hidden}
@@ -637,8 +637,8 @@
   .mp-btn.prev:hover,.mp-btn.next:hover{background:rgba(255,107,53,.4);color:#fff}
   .mp-btn.hide{background:rgba(255,80,80,.2);color:rgba(255,255,255,.6);border:1px solid rgba(255,80,80,.3)}
   .mp-btn.hide:hover{background:rgba(255,80,80,.4);color:#fff}
-  .player .mp-btn.hide{opacity:0;pointer-events:none;width:0;padding:0;border:none}
-  .player.expanded .mp-btn.hide{opacity:1;pointer-events:auto;width:28px;padding:0;border:1px solid rgba(255,80,80,.3)}
+  .player .mp-btn.hide{opacity:0;pointer-events:none}
+  .player.expanded .mp-btn.hide{opacity:1;pointer-events:auto}
 
 /* 24小时逐时预报 */
 .hourly-card{padding:12px 0!important}
@@ -2075,12 +2075,14 @@ switchCity(0);
     if (!titleEl) return;
     var inner = titleEl.querySelector('.mp-title-inner');
     if (!inner) return;
-    var txt = inner.textContent.split('        ')[0] || inner.textContent;
+    // 提取原始歌名（去除重复和多余空格）
+    var txt = (inner.textContent || '').replace(/(\s{4,})(.*)/, '').trim();
+    if (!txt) { txt = inner.textContent.trim(); }
     titleEl.classList.remove('scroll');
     inner.style.transform = '';
     void inner.offsetWidth;
     if (inner.scrollWidth > titleEl.clientWidth + 2) {
-      inner.textContent = txt + '        ' + txt;
+      inner.textContent = txt + '    ' + txt;
       titleEl.classList.add('scroll');
       startTitleScroll(inner, titleEl, txt);
     } else {
