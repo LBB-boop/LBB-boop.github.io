@@ -617,8 +617,7 @@
   .player:hover,.player.expanded{transform:translateX(0);opacity:1;border-color:rgba(255,80,80,.65);box-shadow:0 6px 24px rgba(0,0,0,.5)}
   .player:not(.expanded) .mp-info,.player:not(.expanded) .mp-btns{opacity:0;pointer-events:none}
   .player.expanded .mp-info,.player.expanded .mp-btns{opacity:1;pointer-events:auto}
-  .player:not(.expanded) .mp-btn.hide{opacity:0;pointer-events:none}
-  .player.expanded .mp-btn.hide{opacity:1;pointer-events:auto}
+
   .mp-icon{font-size:18px;animation:mpP 2s ease-in-out infinite;flex-shrink:0;margin-right:4px}
   .mp-icon.playing{animation:mpP .9s ease-in-out infinite}
   @keyframes mpP{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
@@ -636,8 +635,7 @@
   .mp-btn.mute.on{color:#ff6b6b;border-color:rgba(255,107,107,.4)}
   .mp-btn.prev,.mp-btn.next{background:rgba(255,255,255,.08);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.12)}
   .mp-btn.prev:hover,.mp-btn.next:hover{background:rgba(255,107,53,.4);color:#fff}
-  .mp-btn.hide{background:rgba(255,80,80,.2);color:rgba(255,255,255,.6);border:1px solid rgba(255,80,80,.3)}
-  .mp-btn.hide:hover{background:rgba(255,80,80,.4);color:#fff}
+
 
 /* 24小时逐时预报 */
 .hourly-card{padding:12px 0!important}
@@ -2033,7 +2031,6 @@ switchCity(0);
     <button class="mp-btn next" id="mpNextBtn" title="下一曲">&#9197;</button>
     <button class="mp-btn mute" id="mpMuteBtn" title="静音">&#128263;</button>
   </div>
-  <button class="mp-btn hide" id="mpHideBtn" title="收起播放器">&#9002;</button>
 </div>
 <audio id="bgMusic" preload="auto"></audio>
 <script>
@@ -2055,7 +2052,6 @@ switchCity(0);
   var mpTitle = document.getElementById('mpTitle');
   var prevBtn = document.getElementById('mpPrevBtn');
   var nextBtn = document.getElementById('mpNextBtn');
-  var hideBtn = document.getElementById('mpHideBtn');
 
   // 歌曲名处理
   function getTitle(n) {
@@ -2198,8 +2194,6 @@ switchCity(0);
   prevBtn.addEventListener('click', doPrev);
   nextBtn.addEventListener('click', doNext);
   muteBtn.addEventListener('click', doMute);
-  hideBtn && hideBtn.addEventListener('click', function(e){ e.stopPropagation(); togglePlayer(false); });
-  hideBtn && hideBtn.addEventListener('touchstart', function(e){ e.preventDefault(); e.stopPropagation(); togglePlayer(false); }, {passive:false});
 
   // ── 音乐播放器展开/收起 ──
   var player = document.getElementById('Player');
