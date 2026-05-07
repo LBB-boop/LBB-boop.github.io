@@ -2088,13 +2088,13 @@ switchCity(0);
   var scrollTimer = null, scrollX = 0, scrollSpeed = 1;
   function startTitleScroll(inner, titleEl, txt) {
     clearInterval(scrollTimer);
-    scrollX = titleEl.clientWidth;
-    inner.style.transform = 'translateX(' + scrollX + 'px)';
+    scrollX = 0;
+    inner.style.transform = 'translateX(0)';
     scrollTimer = setInterval(function() {
       var player = document.getElementById('Player');
       if (!player || !player.classList.contains('expanded')) {
-        scrollX = titleEl.clientWidth;
-        inner.style.transform = 'translateX(' + scrollX + 'px)';
+        scrollX = 0;
+        inner.style.transform = 'translateX(0)';
         return;
       }
       var titleWidth = txt.length * 11;
