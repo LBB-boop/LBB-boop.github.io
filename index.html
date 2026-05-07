@@ -630,11 +630,9 @@
   .mp-btn{width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .2s}
   .mp-btn.play{background:linear-gradient(135deg,#ff4444,#ff8a80);color:#fff}
   .mp-btn.play:hover{transform:scale(1.12)}
-  .mp-btn.mute{background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.12)}
-  .mp-btn.mute:hover{background:rgba(255,255,255,.16)}
+  .mp-btn.mute,.mp-btn.prev,.mp-btn.next{background:rgba(255,255,255,.08);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.12)}
+  .mp-btn.mute:hover,.mp-btn.prev:hover,.mp-btn.next:hover{background:rgba(255,107,53,.4);color:#fff}
   .mp-btn.mute.on{color:#ff6b6b;border-color:rgba(255,107,107,.4)}
-  .mp-btn.prev,.mp-btn.next{background:rgba(255,255,255,.08);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.12)}
-  .mp-btn.prev:hover,.mp-btn.next:hover{background:rgba(255,107,53,.4);color:#fff}
   .mp-btn.hide{background:rgba(255,80,80,.2);color:rgba(255,255,255,.6);border:1px solid rgba(255,80,80,.3)}
   .mp-btn.hide:hover{background:rgba(255,80,80,.4);color:#fff}
   .player .mp-btn.hide{opacity:0;pointer-events:none}
@@ -2188,12 +2186,11 @@ switchCity(0);
   function togglePlayer(show) {
     player && player.classList[show ? 'add' : 'remove']('expanded');
   }
-  player && player.addEventListener('click', function(e) {
-    if (e.target.tagName !== 'BUTTON') {
-      player.classList.contains('expanded') ? doPlay() : togglePlayer(true);
-    } else if (e.target === hideBtn) {
-      togglePlayer(false);
-    }
+  player && player.addEventListener("click", function(e) {
+    var t = e.target;
+    if (t.tagName !== "BUTTON") {
+      player.classList.contains("expanded") ? doPlay() : togglePlayer(true);
+    } else if (t === hideBtn) { togglePlayer(false); }
   });
 
   // 播放结束自动下一首
