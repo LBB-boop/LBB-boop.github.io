@@ -2183,36 +2183,18 @@ switchCity(0);
   nextBtn.addEventListener('click', doNext);
   muteBtn.addEventListener('click', doMute);
 
-  // 隐藏按钮 - 点击收起播放器
-  if (hideBtn) {
-    hideBtn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      collapsePlayer();
-    });
-  }
-
   // ── 音乐播放器展开/收起 ──
   var player = document.getElementById('Player');
-  // 默认隐藏
-  function expandPlayer() {
-    if (player) player.classList.add('expanded');
+  function togglePlayer(show) {
+    player && player.classList[show ? 'add' : 'remove']('expanded');
   }
-  function collapsePlayer() {
-    if (player) player.classList.remove('expanded');
-  }
-  // 点击播放器展开（隐藏状态）或播放/暂停（展开状态）
-  if (player) {
-    player.addEventListener('click', function(e) {
-      var tag = e.target.tagName;
-      if (tag !== 'BUTTON') {
-        if (!player.classList.contains('expanded')) {
-          expandPlayer();
-        } else {
-          doPlay();
-        }
-      }
-    });
-  }
+  player && player.addEventListener('click', function(e) {
+    if (e.target.tagName !== 'BUTTON') {
+      player.classList.contains('expanded') ? doPlay() : togglePlayer(true);
+    } else if (e.target === hideBtn) {
+      togglePlayer(false);
+    }
+  });
 
   // 播放结束自动下一首
   mp.addEventListener('ended', function() {
