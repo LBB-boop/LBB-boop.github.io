@@ -2065,6 +2065,7 @@ switchCity(0);
       .replace(/^music\+?/i, '')
       .replace(/\.mp3$/i, '')
       .replace(/\+[^\+]*$/, '')
+      .replace(/\//g, '')
       .replace(/\(/g, '（')
       .replace(/\)/g, '）');
   }
