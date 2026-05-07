@@ -625,8 +625,7 @@
   .mp-info{flex:1;min-width:0;overflow:hidden}
   .mp-title{font-size:11px;color:#fff;font-weight:600;white-space:nowrap;overflow:visible;position:relative;display:block}
   .mp-title-inner{display:inline-block;white-space:nowrap;max-width:100%;overflow:visible}
-  .mp-title.scroll .mp-title-inner{display:inline-block;white-space:nowrap;animation:titleScroll 8s linear infinite}
-  @keyframes titleScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+  .mp-title.scroll .mp-title-inner{white-space:nowrap;display:inline-block}
   .mp-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:1px}
   .mp-btns{display:flex;gap:4px;align-items:center;flex-shrink:0}
   .mp-btn{width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .2s}
@@ -2077,22 +2076,37 @@ switchCity(0);
     if (!titleEl) return;
     var inner = titleEl.querySelector('.mp-title-inner');
     if (!inner) return;
-    // 强制回流以获取准确宽度
+    var txt = inner.textContent.split('        ')[0] || inner.textContent;
     titleEl.classList.remove('scroll');
-    inner.style.animation = 'none';
-    // 触发回流
+    inner.style.transform = '';
     void inner.offsetWidth;
     if (inner.scrollWidth > titleEl.clientWidth + 2) {
-      // 文字超长，开启滚动：复制一份文字形成无缝循环
-      var txt = inner.textContent;
       inner.textContent = txt + '        ' + txt;
       titleEl.classList.add('scroll');
-      inner.style.animation = '';
+      startTitleScroll(inner, titleEl, txt);
     } else {
-      inner.textContent = inner.textContent.split('        ')[0] || inner.textContent;
-      titleEl.classList.remove('scroll');
-      inner.style.animation = '';
+      inner.textContent = txt;
     }
+  }
+  var scrollTimer = null, scrollX = 0, scrollSpeed = 1;
+  function startTitleScroll(inner, titleEl, txt) {
+    clearInterval(scrollTimer);
+    scrollX = titleEl.clientWidth;
+    inner.style.transform = 'translateX(' + scrollX + 'px)';
+    scrollTimer = setInterval(function() {
+      var player = document.getElementById('Player');
+      if (!player || !player.classList.contains('expanded')) {
+        scrollX = titleEl.clientWidth;
+        inner.style.transform = 'translateX(' + scrollX + 'px)';
+        return;
+      }
+      var titleWidth = txt.length * 11;
+      scrollX -= scrollSpeed;
+      if (scrollX <= -(titleWidth)) {
+        scrollX = titleEl.clientWidth;
+      }
+      inner.style.transform = 'translateX(' + scrollX + 'px)';
+    }, 50);
   }
 
   // 加载指定歌曲
