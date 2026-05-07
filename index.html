@@ -625,8 +625,8 @@
   .mp-info{flex:1;min-width:0;overflow:hidden}
   .mp-title{font-size:11px;color:#fff;font-weight:600;white-space:nowrap;overflow:visible;position:relative;display:block}
   .mp-title-inner{display:inline-block;white-space:nowrap;max-width:100%;overflow:visible}
-  .mp-title.scroll .mp-title-inner{display:inline-block;white-space:nowrap;animation:titleScroll 8s linear infinite;padding-right:20px}
-  @keyframes titleScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+  .mp-title.scroll .mp-title-inner{display:inline-block;white-space:nowrap;animation:titleScroll 10s linear infinite}
+  @keyframes titleScroll{0%{transform:translateX(0)}60%{transform:translateX(-50%)}75%{transform:translateX(-50%)}100%{transform:translateX(0)}}
   .mp-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:1px}
   .mp-btns{display:flex;gap:4px;align-items:center;flex-shrink:0}
   .mp-btn{width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .2s}
