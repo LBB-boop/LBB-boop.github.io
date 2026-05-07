@@ -2063,9 +2063,8 @@ switchCity(0);
   function getTitle(n) {
     return n
       .replace(/^music\+?/i, '')
-      .replace(/\.mp3$/, '')
-      .replace(/\+[^\+]+$/, '')
-      .replace(/\//g, ' + ')
+      .replace(/\.mp3$/i, '')
+      .replace(/\+[^\+]*$/, '')
       .replace(/\(/g, '（')
       .replace(/\)/g, '）');
   }
