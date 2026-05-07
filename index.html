@@ -613,15 +613,16 @@
   @keyframes f4{0%,100%{transform:translateY(0) scale(1);opacity:.65}50%{transform:translateY(-14px) scale(1.12);opacity:.88}}
 
   /* ── 音乐播放器 ── */
-  .player{position:fixed;bottom:24px;right:16px;z-index:999;display:flex;align-items:center;gap:8px;background:rgba(15,5,10,.9);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,80,80,.4);border-radius:28px;padding:10px 14px 10px 12px;box-shadow:0 6px 24px rgba(0,0,0,.5);transition:transform .45s cubic-bezier(.4,0,.2,1),opacity .45s;max-width:280px;cursor:pointer;touch-action:manipulation;transform:translateX(calc(100% - 60px));opacity:.85}
+  .player{position:fixed;bottom:24px;right:16px;z-index:999;display:flex;align-items:center;gap:8px;background:rgba(15,5,10,.9);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,80,80,.4);border-radius:28px;padding:10px 14px 10px 12px;box-shadow:0 6px 24px rgba(0,0,0,.5);transition:transform .45s cubic-bezier(.4,0,.2,1),opacity .45s;max-width:280px;cursor:pointer;touch-action:manipulation;transform:translateX(calc(100% - 44px));opacity:.85}
   .player:hover{transform:translateX(0);opacity:1;border-color:rgba(255,80,80,.65);box-shadow:0 6px 24px rgba(0,0,0,.5)}
   .player.expanded{transform:translateX(0);opacity:1}
   .player.expanded:hover{border-color:rgba(255,80,80,.65)}
+  .player .mp-info,.player .mp-btns{opacity:0;pointer-events:none}
   .player.expanded .mp-info,.player.expanded .mp-btns{opacity:1;pointer-events:auto}
-  .mp-icon{font-size:18px;animation:mpP 2s ease-in-out infinite;flex-shrink:0;transition:transform .3s}
-  .mp-icon.playing{animation:mpP .9s ease-in-out infinite}
+  .player .mp-icon{font-size:18px;animation:mpP 2s ease-in-out infinite;flex-shrink:0;transition:transform .3s}
+  .player.expanded .mp-icon{animation:mpP .9s ease-in-out infinite}
   @keyframes mpP{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
-  .mp-info{flex:1;min-width:0;overflow:hidden;transition:opacity .25s}
+  .mp-info{flex:1;min-width:0;overflow:hidden}
   .mp-title{font-size:11px;color:#fff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative}
   .mp-title.scroll .mp-title-inner{display:inline-block;white-space:nowrap;animation:titleScroll 8s linear infinite}
   @keyframes titleScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
@@ -2182,6 +2183,8 @@ switchCity(0);
   prevBtn.addEventListener('click', doPrev);
   nextBtn.addEventListener('click', doNext);
   muteBtn.addEventListener('click', doMute);
+  hideBtn && hideBtn.addEventListener('click', function(e){ e.stopPropagation(); togglePlayer(false); });
+  hideBtn && hideBtn.addEventListener('touchstart', function(e){ e.preventDefault(); e.stopPropagation(); togglePlayer(false); }, {passive:false});
 
   // ── 音乐播放器展开/收起 ──
   var player = document.getElementById('Player');
@@ -2191,8 +2194,6 @@ switchCity(0);
   player && player.addEventListener('click', function(e) {
     if (e.target.tagName !== 'BUTTON') {
       player.classList.contains('expanded') ? doPlay() : togglePlayer(true);
-    } else if (e.target === hideBtn) {
-      togglePlayer(false);
     }
   });
 
