@@ -613,7 +613,7 @@
   @keyframes f4{0%,100%{transform:translateY(0) scale(1);opacity:.65}50%{transform:translateY(-14px) scale(1.12);opacity:.88}}
 
   /* ── 音乐播放器 ── */
-  .player{position:fixed;bottom:24px;right:16px;z-index:999;display:flex;align-items:center;gap:8px;background:rgba(15,5,10,.9);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,80,80,.4);border-radius:28px;padding:10px 14px 10px 12px;box-shadow:0 6px 24px rgba(0,0,0,.5);transition:transform .45s cubic-bezier(.4,0,.2,1),opacity .45s;max-width:280px;cursor:pointer;touch-action:manipulation;transform:translateX(100%);opacity:.85}
+  .player{position:fixed;bottom:24px;right:16px;z-index:999;display:flex;align-items:center;gap:8px;background:rgba(15,5,10,.9);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,80,80,.4);border-radius:28px;padding:10px 14px 10px 12px;box-shadow:0 6px 24px rgba(0,0,0,.5);transition:transform .45s cubic-bezier(.4,0,.2,1),opacity .45s;max-width:280px;cursor:pointer;touch-action:manipulation;transform:translateX(calc(100% - 44px));opacity:.85}
   .player:hover,.player.expanded{transform:translateX(0);opacity:1;border-color:rgba(255,80,80,.65);box-shadow:0 6px 24px rgba(0,0,0,.5)}
   .player:not(.expanded) .mp-info,.player:not(.expanded) .mp-btns{opacity:0;pointer-events:none}
   .player.expanded .mp-info,.player.expanded .mp-btns{opacity:1;pointer-events:auto}
