@@ -615,9 +615,9 @@
   /* ── 音乐播放器 ── */
   .player{position:fixed;bottom:24px;right:16px;z-index:999;display:flex;align-items:center;gap:8px;background:rgba(15,5,10,.9);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,80,80,.4);border-radius:28px;padding:10px 14px 10px 12px;box-shadow:0 6px 24px rgba(0,0,0,.5);transition:transform .45s cubic-bezier(.4,0,.2,1),opacity .45s;max-width:280px;cursor:pointer;touch-action:manipulation}
   .player:hover{border-color:rgba(255,80,80,.65);transform:scale(1.02)}
-  .player.collapsed{transform:translateX(calc(100% - 40px));opacity:.85;border-color:rgba(255,80,80,.25);box-shadow:0 4px 12px rgba(0,0,0,.3)}
+  .player.collapsed{transform:translateX(calc(100% - 40px));opacity:.85;border-color:rgba(255,80,80,.25);box-shadow:0 4px 12px rgba(0,0,0,.3);pointer-events:auto}
   .player.collapsed:hover{transform:translateX(0);opacity:1;border-color:rgba(255,80,80,.65);box-shadow:0 6px 24px rgba(0,0,0,.5)}
-  .player.collapsed .mp-info,.player.collapsed .mp-btns{opacity:0;pointer-events:none;transition:opacity .25s}
+  .player.collapsed .mp-info,.player.collapsed .mp-btns{opacity:0;pointer-events:none}
   .player.collapsed:hover .mp-info,.player.collapsed:hover .mp-btns{opacity:1;pointer-events:auto;transition:opacity .3s .1s}
   .mp-icon{font-size:18px;animation:mpP 2s ease-in-out infinite;flex-shrink:0;transition:transform .3s}
   .mp-icon.playing{animation:mpP .9s ease-in-out infinite}
