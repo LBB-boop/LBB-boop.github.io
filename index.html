@@ -2197,14 +2197,20 @@ switchCity(0);
 
   // ── 音乐播放器展开/收起 ──
   var player = document.getElementById('Player');
-  function togglePlayer(show) {
-    player && player.classList[show ? 'add' : 'remove']('expanded');
-  }
-  player && player.addEventListener('click', function(e) {
-    if (e.target.tagName !== 'BUTTON') {
-      player.classList.contains('expanded') ? doPlay() : togglePlayer(true);
-    }
-  });
+	  var expandTimer = null;
+	  function togglePlayer(show) {
+	    player && player.classList[show ? 'add' : 'remove']('expanded');
+	  }
+	  function expandWithAutoHide() {
+	    togglePlayer(true);
+	    clearTimeout(expandTimer);
+	    expandTimer = setTimeout(function() { togglePlayer(false); }, 2000);
+	  }
+	  player && player.addEventListener('click', function(e) {
+	    if (e.target.tagName !== 'BUTTON') {
+	      player.classList.contains('expanded') ? doPlay() : expandWithAutoHide();
+	    }
+	  });
 
   // 播放结束自动下一首
   mp.addEventListener('ended', function() {
