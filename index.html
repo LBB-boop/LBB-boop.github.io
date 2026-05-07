@@ -2205,7 +2205,7 @@ switchCity(0);
 	  function expandWithAutoHide() {
 	    togglePlayer(true);
 	    clearTimeout(expandTimer);
-	    expandTimer = setTimeout(function() { togglePlayer(false); }, 2000);
+	    expandTimer = setTimeout(function() { togglePlayer(false); }, 5000);
 	  }
 	  player && player.addEventListener('click', function(e) {
 	    if (e.target.tagName !== 'BUTTON') {
