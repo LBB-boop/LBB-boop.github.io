@@ -623,8 +623,9 @@
   .player.expanded .mp-icon{animation:mpP .9s ease-in-out infinite}
   @keyframes mpP{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
   .mp-info{flex:1;min-width:0;overflow:hidden}
-  .mp-title{font-size:11px;color:#fff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative}
-  .mp-title.scroll .mp-title-inner{display:inline-block;white-space:nowrap;animation:titleScroll 8s linear infinite}
+  .mp-title{font-size:11px;color:#fff;font-weight:600;white-space:nowrap;overflow:visible;position:relative;display:block}
+  .mp-title-inner{display:inline-block;white-space:nowrap;max-width:100%;overflow:visible}
+  .mp-title.scroll .mp-title-inner{display:inline-block;white-space:nowrap;animation:titleScroll 8s linear infinite;padding-right:20px}
   @keyframes titleScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
   .mp-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:1px}
   .mp-btns{display:flex;gap:4px;align-items:center;flex-shrink:0}
