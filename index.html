@@ -977,6 +977,63 @@ body::before {
   pointer-events: none;
   display: block;
 }
+
+  .share-btn {
+    position: fixed;
+    bottom: 24px;
+    left: 16px;
+    width: 44px;
+    height: 44px;
+    background: rgba(255,68,68,0.85);
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    z-index: 998;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .share-btn:hover { transform: scale(1.1); background: rgba(255,68,68,1); }
+  .share-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 10001;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  .share-modal.show { display: flex; }
+  .share-modal canvas {
+    max-width: 90vw;
+    max-height: 70vh;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+  .share-modal .share-tips {
+    color: #fff;
+    margin: 16px 0;
+    font-size: 14px;
+    text-align: center;
+  }
+  .share-modal .share-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .share-modal button {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .share-modal button:hover { transform: scale(1.05); }
+  .share-modal .dl-btn { background: #07c160; color: #fff; }
+  .share-modal .close-btn { background: rgba(255,255,255,0.2); color: #fff; }
+
 </style>
   <!-- iOS主屏图标 -->
   <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' fill='%230d0d0d' rx='40'/><text x='50%25' y='55%25' font-size='100' text-anchor='middle' dominant-baseline='middle'>🔥</text></svg>">
@@ -1432,6 +1489,7 @@ body::before {
       </div>
   </div></div>
 
+    <button class="share-btn" id="shareBtn" title="分享图片">📤</button>
   <div class="footer">🚀 火星人 · Open-Meteo · 仅供参考 · 欢迎回家</div>
 </div>
 
@@ -2018,6 +2076,55 @@ switchCity(0);
     slides[current].classList.add('active');
   }, 6000);
 })();
+
+  // 分享功能
+  var shareBtn = document.getElementById('shareBtn');
+  var shareModal = document.getElementById('shareModal');
+  if (shareBtn && shareModal) {
+    shareBtn.addEventListener('click', function() {
+      shareModal.classList.add('show');
+      var canvas = document.getElementById('shareCanvas');
+      var ctx = canvas.getContext('2d');
+      var w = 400, h = 500;
+      canvas.width = w; canvas.height = h;
+      // 背景
+      var grad = ctx.createLinearGradient(0,0,0,h);
+      grad.addColorStop(0,'#1a0a0a'); grad.addColorStop(1,'#2d1515');
+      ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+      // logo
+      var logoImg = new Image();
+      logoImg.crossOrigin = 'anonymous';
+      logoImg.onload = function() { ctx.drawImage(logoImg, w/2-25, 30, 50, 50); };
+      logoImg.src = 'img/ateez-logo.png';
+      // 标题
+      ctx.fillStyle = '#ff4444'; ctx.font = 'bold 24px sans-serif';
+      ctx.textAlign = 'center'; ctx.fillText('火星人天气预报', w/2, 110);
+      // 天气
+      var temp = document.querySelector('.temp') ? document.querySelector('.temp').textContent : '';
+      var desc = document.querySelector('.desc') ? document.querySelector('.desc').textContent : '';
+      var city = document.querySelector('.city-name') ? document.querySelector('.city-name').textContent : '';
+      ctx.fillStyle = '#fff'; ctx.font = '48px sans-serif';
+      ctx.fillText(temp, w/2, 200);
+      ctx.font = '18px sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.7)';
+      ctx.fillText(desc, w/2, 240);
+      ctx.fillText(city, w/2, 270);
+      // 来源
+      ctx.font = '12px sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.4)';
+      ctx.fillText('火星人天气预报 · 仅供参考 · 欢迎回家', w/2, h-30);
+    });
+    shareModal.addEventListener('click', function(e) {
+      if (e.target === shareModal || e.target.classList.contains('close-btn')) {
+        shareModal.classList.remove('show');
+      }
+    });
+    document.getElementById('dlShare').addEventListener('click', function() {
+      var a = document.createElement('a');
+      a.download = '火星人天气预报.png';
+      a.href = document.getElementById('shareCanvas').toDataURL('image/png');
+      a.click();
+    });
+  }
+
 </script>
 
 <div class="player" id="Player">
@@ -2262,5 +2369,64 @@ switchCity(0);
     }
   }, { once: true });
 })();
+
+  // 分享功能
+  var shareBtn = document.getElementById('shareBtn');
+  var shareModal = document.getElementById('shareModal');
+  if (shareBtn && shareModal) {
+    shareBtn.addEventListener('click', function() {
+      shareModal.classList.add('show');
+      var canvas = document.getElementById('shareCanvas');
+      var ctx = canvas.getContext('2d');
+      var w = 400, h = 500;
+      canvas.width = w; canvas.height = h;
+      // 背景
+      var grad = ctx.createLinearGradient(0,0,0,h);
+      grad.addColorStop(0,'#1a0a0a'); grad.addColorStop(1,'#2d1515');
+      ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+      // logo
+      var logoImg = new Image();
+      logoImg.crossOrigin = 'anonymous';
+      logoImg.onload = function() { ctx.drawImage(logoImg, w/2-25, 30, 50, 50); };
+      logoImg.src = 'img/ateez-logo.png';
+      // 标题
+      ctx.fillStyle = '#ff4444'; ctx.font = 'bold 24px sans-serif';
+      ctx.textAlign = 'center'; ctx.fillText('火星人天气预报', w/2, 110);
+      // 天气
+      var temp = document.querySelector('.temp') ? document.querySelector('.temp').textContent : '';
+      var desc = document.querySelector('.desc') ? document.querySelector('.desc').textContent : '';
+      var city = document.querySelector('.city-name') ? document.querySelector('.city-name').textContent : '';
+      ctx.fillStyle = '#fff'; ctx.font = '48px sans-serif';
+      ctx.fillText(temp, w/2, 200);
+      ctx.font = '18px sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.7)';
+      ctx.fillText(desc, w/2, 240);
+      ctx.fillText(city, w/2, 270);
+      // 来源
+      ctx.font = '12px sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.4)';
+      ctx.fillText('火星人天气预报 · 仅供参考 · 欢迎回家', w/2, h-30);
+    });
+    shareModal.addEventListener('click', function(e) {
+      if (e.target === shareModal || e.target.classList.contains('close-btn')) {
+        shareModal.classList.remove('show');
+      }
+    });
+    document.getElementById('dlShare').addEventListener('click', function() {
+      var a = document.createElement('a');
+      a.download = '火星人天气预报.png';
+      a.href = document.getElementById('shareCanvas').toDataURL('image/png');
+      a.click();
+    });
+  }
+
 </script>
+
+  <div class="share-modal" id="shareModal">
+    <canvas id="shareCanvas"></canvas>
+    <div class="share-tips">长按图片保存或截图分享到微信</div>
+    <div class="share-actions">
+      <button class="dl-btn" id="dlShare">下载图片</button>
+      <button class="close-btn">关闭</button>
+    </div>
+  </div>
+
 </body></html>
